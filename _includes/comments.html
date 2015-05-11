@@ -3,7 +3,7 @@
 	<script type="text/javascript">
 		(function() {
 			var secureUrl = 'https://{{ site.data.info.domain }}{{ page.url }}';
-			if (window.location.protocol == 'https') {
+			if (window.location.protocol.toLowerCase() == 'https:') {
 				var disqus_shortname  = 'zvxryb';
 				var disqus_identifier = '{{ page.id }}';
 				var disqus_title      = '{{ page.title }}';
