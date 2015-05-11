@@ -1,0 +1,15 @@
+{% for entry in entries %}
+	<div class='ml-post'>
+		<div class='ml-header'>
+			<h1>{{ entry.title }}</h1>
+			<span class='ml-date'>{{ entry.date | date: "%Y %b %-d, %a" }}</span>
+		</div>
+		<div class='ml-content'>
+			{{ entry.excerpt | markdownify }}
+		</div>
+		<div class='ml-footer'>
+			<a href='{{ entry.url }}'>Continue</a>
+		</div>
+	</div>
+{% endfor %}
+

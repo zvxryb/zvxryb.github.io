@@ -1,0 +1,42 @@
+employment:
+  - employer:
+      name: ALK Technologies
+      industry: Navigation Software
+      location:
+        city:  Princeton
+        state: NJ
+    start:
+      year:  2012
+      month: October
+    end:
+      year:  2015
+      month: April
+    title: Programmer/Analyst
+    division: Data Team
+    duties:
+      - Development of Processes and Libraries in C++
+      - Automation in Ruby
+      - Application Development in C#
+education:
+  - school:
+      name: Stevens Inst. of Tech.
+      location:
+        city:  Hoboken
+        state: NJ
+    start:
+      year:     2007
+      semester: Fall
+    end:
+      year:     2012
+      semester: Spring
+    degree:
+      type: B. Eng.
+      discipline: Computer Engineering
+      honors: with Honor
+interests:
+    - Graphics Programming and Physically-Based Rendering Techniques
+    - Game Development
+    - Embedded Development
+    - Digital Logic
+    - Digital and Analog Electronics
+

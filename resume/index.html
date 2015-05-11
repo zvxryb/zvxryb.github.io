@@ -1,0 +1,71 @@
+---
+layout: page
+section: Resume
+---
+<div class='ml-section'>
+	<div class='ml-header'>
+		<h1>Employment</h1>
+	</div>
+	<div class='ml-content'>
+		{% for job in site.data.resume.employment %}
+			{% assign employer = job.employer %}
+			<div class='ml-employer'>
+				<div class='ml-split'>
+					<h2 class='ml-left'>{{job.title}}</h2>
+					<h2 class='ml-right'>{% include timeframe.html start=job.start end=job.end %}</h2>
+				</div>
+				<h3 class='ml-indent'>
+					{{employer.name}} 
+					({% include location.html location=employer.location %})
+					{% if employer.industry %} - {{job.employer.industry}}{% endif %}
+					{% if job.division %} - {{job.division}}{% endif %}
+				</h3>
+				<ul>
+					{% for duty in job.duties %}
+						<li>{{duty}}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+	</div>
+	<div class='ml-header'>
+		<h1>Education</h1>
+	</div>
+	<div class='ml-content'>
+		{% for studies in site.data.resume.education %}
+			{% assign degree = studies.degree %}
+			{% assign school = studies.school %}
+			<div class='ml-employer'>
+				<div class='ml-split'>
+					<h2 class='ml-left'>
+						{{degree.type}} in {{degree.discipline}}
+						{% if degree.honors %} ({{degree.honors}}){% endif %}
+					</h2>
+					<h2 class='ml-right'>
+						{% include timeframe.html start=studies.start end=studies.end %}
+					</h2>
+				</div>
+				<h3 class='ml-indent'>
+					{{school.name}} 
+					({% include location.html location=school.location %})
+				</h3>
+				<ul>
+					{% for duty in job.duties %}
+						<li>{{duty}}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+	</div>
+	<div class='ml-header'>
+		<h1>Interests</h1>
+	</div>
+	<div class='ml-content'>
+		<ul>
+			{% for interest in site.data.resume.interests %}
+				<li>{{interest}}</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+

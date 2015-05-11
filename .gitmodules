@@ -1,0 +1,3 @@
+[submodule "graphy"]
+	path = arcade/graphy/_lib/
+	url = https://github.com/zvxryb/graphy.git

@@ -1,0 +1,8 @@
+{% assign date = include.date %}
+{% if date.month %}
+	{{date.month}} 
+{% elsif date.semester %}
+	{{date.semester}} 
+{% endif %}
+{{date.year}}
+

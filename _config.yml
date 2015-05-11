@@ -1,0 +1,4 @@
+exclude: [Gemfile, Gemfile.lock]
+permalink: pretty
+excerpt_separator: <!--continue-->
+

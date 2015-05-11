@@ -1,0 +1,33 @@
+---
+---
+<!DOCTYPE html>
+<!-- copyright 2015 by mike lodato (zvxryb@gmail.com)
+     all rights reserved -->
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<title>{{ site.data.info.name }}{% if page.section %}'s {{ page.section }}{% endif %}{% if page.title %} - {{ page.title }}{% endif %}</title>
+		<link rel='stylesheet' href='/style/main.css'></link>
+	</head>
+	<body>
+		<div id='ml-header'>
+			<a id='ml-title' href='/'>
+				<h1>{{ site.data.info.name }}</h1>
+				{%if page.section %}
+				<h2>{{ page.section }}</h2>
+				{% endif %}
+			</a>
+			<div id='ml-nav'>
+				<a class='ml-item' href='/blog/'><h2>Blog</h2></a>
+				<a class='ml-item' href='/resume/'><h2>Resume</h2></a>
+				<a class='ml-item' href='/arcade/'><h2>Arcade</h2></a>
+			</div>
+		</div>
+		<div>
+			<div id='ml-content'>
+			{{ content }}
+			</div>
+		</div>
+	</body>
+</html>
+
