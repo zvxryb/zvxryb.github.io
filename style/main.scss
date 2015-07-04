@@ -124,6 +124,24 @@ li > {
 	}
 }
 
+input {
+	font-family: $ml-fixed-font;
+	background-color: $ml-primary-bg - #101010;
+	           color: $ml-primary-fg;
+	border-style: solid;
+	border-width: 1px;
+	border-color: $ml-primary-bg - #181818;
+	padding: 0.2em;
+}
+
+input:disabled {
+	color: ($ml-primary-fg - #101010 + $ml-primary-bg) / 2;
+}
+
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
 #ml-header {
 	@include portrait { align-self: stretch; }
 
