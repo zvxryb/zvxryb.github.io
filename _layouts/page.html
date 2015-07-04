@@ -8,6 +8,17 @@
 		<meta charset='UTF-8'>
 		<title>{{ site.data.info.name }}{% if page.section %}'s {{ page.section }}{% endif %}{% if page.title %} - {{ page.title }}{% endif %}</title>
 		<link rel='stylesheet' href='/style/main.css'></link>
+		<script src='/lib/require.js'></script>
+		<script>
+			requirejs.config({
+				baseUrl: '/',
+				paths: {
+					require: 'lib/require',
+					math:    'lib/math.min',
+					arcade:  'arcade/lib'
+				}
+			});
+		</script>
 	</head>
 	<body>
 		<div id='ml-header'>
