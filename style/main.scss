@@ -62,7 +62,8 @@ body {
 	flex-wrap:   nowrap;
 	align-items: stretch;
 
-	min-height: 100%;
+	@include portrait  { min-height: 100%; }
+	@include landscape {     height: 100%; }
 
 	background-color: $ml-primary-dark-bg;
 	color:            $ml-primary-fg;
@@ -86,6 +87,7 @@ a { text-decoration: inherit; }
 p {
 	margin-top:    1.0em;
 	margin-bottom: 1.0em;
+	line-height:   200%;
 }
 
 @include headings {
@@ -166,12 +168,17 @@ input[type=number] {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
+		
+		@include landscape {
+			height: 100%;
+			overflow-y: auto;
+		}
 	}
 }
 
 #ml-title {
 	min-height: 8em;
-	min-width: 20em;
+	min-width: 16em;
 
 	> h1 {
 		text-align:    center;
@@ -192,6 +199,7 @@ input[type=number] {
 
 	display: flex;
 	@include portrait {
+		flex-wrap: wrap;
 		flex-direction: row;
 		justify-content: flex-end;
 	}
