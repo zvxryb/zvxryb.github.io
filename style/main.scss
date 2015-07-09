@@ -27,7 +27,7 @@ $ml-accent-dark-fg:      $ml-accent-fg - #040404;
 $ml-title-font: 'Cinzel', serif;
 $ml-text-font:  'Droid Sans', sans-serif;
 $ml-fixed-font: 'Inconsolata', monospace;
-$ml-text-size:  10pt;
+$ml-text-size:  11pt;
 
 @mixin headings {
 	h1, h2, h3, h4, h5, h6 { @content }
