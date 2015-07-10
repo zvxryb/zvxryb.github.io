@@ -24,7 +24,19 @@ $ml-accent-light-fg:     $ml-accent-fg + #040404;
 $ml-accent-dark-bg:      $ml-accent-bg - #040404;
 $ml-accent-dark-fg:      $ml-accent-fg - #040404;
 
+$ml-code-bg:          $ml-accent-bg;
+$ml-code-fg:          $ml-accent-fg - #202020;
+$ml-code-comment-fg:  $ml-code-fg   - #606060;
+$ml-code-operator-fg: #ffffff;
+$ml-code-keyword-fg:  #8040ff;
+$ml-code-storage-fg:  #4080ff;
+$ml-code-function-fg: #ffa040;
+$ml-code-number-fg:   #40ff40;
+$ml-code-meta-fg:     #ff4040;
+
 $ml-title-font: 'Cinzel', serif;
+$ml-title-height: 8em;
+$ml-title-width: 16em;
 $ml-text-font:  'Droid Sans', sans-serif;
 $ml-fixed-font: 'Inconsolata', monospace;
 $ml-text-size:  11pt;
@@ -77,9 +89,19 @@ body {
 
 pre, code {
 	font-family: $ml-fixed-font;
-	border-style: solid;
-	border-width: 1px;
-	border-color: rgba(0, 0, 0, 0.1);
+	           color: $ml-code-fg;
+	background-color: $ml-code-bg;
+	.comment                  { color: $ml-code-comment-fg;  }
+	.keyword                  { color: $ml-code-keyword-fg;  }
+	.keyword.operator         { color: $ml-code-operator-fg; }
+	.entity.name.function     { color: $ml-code-function-fg; }
+	.meta.preprocessor        { color: $ml-code-meta-fg;     }
+	.storage                  { color: $ml-code-storage-fg;  }
+	.storage.type             { color: $ml-code-storage-fg + #003000; }
+	.storage.modifier         { color: $ml-code-storage-fg + #300000; }
+	.constant.numeric         { color: $ml-code-number-fg;   }
+	.constant.numeric.integer { color: $ml-code-number-fg + #300000; }
+	.constant.numeric.float   { color: $ml-code-number-fg + #000030; }
 }
 
 a { text-decoration: inherit; }
@@ -110,9 +132,9 @@ ul {
 	margin-bottom: 1.0em;
 
 	> li {
-		padding-left:   2.0em;
-		padding-top:    0.2em;
-		padding-bottom: 0.2em;
+		padding-left:   5.0em;
+		padding-top:    0.4em;
+		padding-bottom: 0.4em;
 	}
 	> li:nth-child(even) { background-color: $ml-primary-dark-bg;  }
 	> li:nth-child(odd)  { background-color: $ml-primary-light-bg; }
@@ -145,6 +167,9 @@ input[type=number] {
 }
 
 #ml-header {
+	min-height: $ml-title-height;
+	min-width:  $ml-title-width;
+	
 	@include portrait { align-self: stretch; }
 
 	display: flex;
@@ -171,14 +196,14 @@ input[type=number] {
 		
 		@include landscape {
 			height: 100%;
-			overflow-y: auto;
+			overflow-y: scroll;
 		}
 	}
 }
 
 #ml-title {
-	min-height: 8em;
-	min-width: 16em;
+	min-height: $ml-title-height;
+	min-width:  $ml-title-width;
 
 	> h1 {
 		text-align:    center;
@@ -233,19 +258,11 @@ input[type=number] {
 
 	padding-left:  2em;
 	padding-right: 2em;
-
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
 }
 
 .ml-post, .ml-section {
 	margin-top: 2em;
 	margin-bottom: 2em;
-
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
 
 	.ml-header {
 		display: flex;
@@ -278,8 +295,22 @@ input[type=number] {
 		background-color: $ml-primary-bg;
 		           color: $ml-primary-fg;
 
-		padding-left:  1em;
-		padding-right: 1em;
+		padding:  1em;
+
+		p { padding-left: 3em; }
+
+		pre {
+			font-family: $ml-fixed-font;
+			margin-top:     1em;
+			margin-bottom:  1em;
+			margin-left:   -1em;
+			margin-right:  -1em;
+			padding-top:    1em;
+			padding-bottom: 1em;
+			padding-left:   6em;
+			padding-right:  1em;
+			overflow-x: auto;
+		}
 	}
 
 	.ml-footer {

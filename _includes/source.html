@@ -1,0 +1,16 @@
+<div id='{{ include.id }}'></div>
+<script>
+	require(['lib/text!{{ include.path }}'], function (src) {
+		var div0 = document.getElementById('{{ include.id }}');
+		var div1 = document.createElement('div');
+		var text = document.createTextNode(src);
+		var code = document.createElement('pre');
+		code.dataset.language = '{{ include.language }}';
+		code.appendChild(text);
+		div1.appendChild(code);
+		Rainbow.color(div1, function() {
+			div0.appendChild(div1);
+		});
+	});
+</script>
+
