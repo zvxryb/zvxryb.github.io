@@ -60,14 +60,12 @@ void main(void) {
 		float t = dist_eye * (1.0 - (float(i) + 0.5) / float(steps));
 		vec3 orig = t * dir_eye;
 		
-		if (occlude(orig, dir_sun))
-			continue;
-		
 		float sunDist = trace(orig, dir_sun);
 		vec3 L_in = E_sun * (beta_R * Phi_R + beta_M * Phi_M) * exp(-(beta_R + beta_M) * sunDist) * dt;
 		
 		color *= F_ex;
-		color += L_in;
+		if (!occlude(orig, dir_sun))
+			color += L_in;
 	}
 	
 	gl_FragColor = toRGBE(color);

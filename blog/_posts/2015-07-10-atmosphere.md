@@ -85,6 +85,8 @@ The following fragment shader is used to draw a full screen quad to an RGBA (RGB
 
 {% include source.html id='atmosphere-shader' path='arcade/shader/atmosphere.frag' language='glsl' %}
 
+*Edit: 2015/07/30 Fixed an issue where samples with occluded in-scatter did not apply extinction
+
 #Results
 
 <div id='atmosphere-demo'></div>
