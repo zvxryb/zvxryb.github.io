@@ -11,7 +11,7 @@ define([
 	'arcade/util/webgl-drawable',
 	'lib/text!arcade/shader/blit.vert',
 	'lib/text!arcade/shader/atmosphere.frag',
-	'lib/text!arcade/shader/display.frag'
+	'lib/text!arcade/shader/display-hdr-rgbe.frag'
 ], function (init, Mesh, Shader, Program, Texture, Framebuffer, Drawable, vertSrc, skyFragSrc, toneFragSrc) {
 	function addText(node, value) {
 		var text = document.createTextNode(value);
@@ -203,7 +203,7 @@ define([
 		var skyFrag  = new Shader(state, gl.FRAGMENT_SHADER, skyFragSrc, [],
 			['r_earth', 'h_sky', 'E_sun', 'dir_sun', 'beta_R', 'beta_M', 'g']);
 		var toneFrag = new Shader(state, gl.FRAGMENT_SHADER, toneFragSrc, [],
-			['exposure']);
+			['exposure', 'color']);
 		var skyProg  = new Program(state, vert, skyFrag );
 		var toneProg = new Program(state, vert, toneFrag);
 		
