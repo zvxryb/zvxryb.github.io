@@ -3,6 +3,7 @@
 
 define([
 	'arcade/util/demo-init',
+	'arcade/util/html-ui',
 	'arcade/util/mesh',
 	'arcade/util/webgl-shader',
 	'arcade/util/webgl-program',
@@ -12,64 +13,39 @@ define([
 	'lib/text!arcade/shader/blit.vert',
 	'lib/text!arcade/shader/atmosphere.frag',
 	'lib/text!arcade/shader/display-hdr-rgbe.frag'
-], function (init, Mesh, Shader, Program, Texture, Framebuffer, Drawable, vertSrc, skyFragSrc, toneFragSrc) {
-	function addText(node, value) {
-		var text = document.createTextNode(value);
-		node.appendChild(text);
-		return text;
-	}
-	
-	function addFormattedText(node, text) {
-		var lastToken = null;
-		text.split(/(_|\^)\{(.+?)\}/).forEach(function (token) {
-			switch (lastToken) {
-				case '^':
-					addElement(node, 'sup', function () {
-						addText(this, token);
-					});
-					break;
-				case '_':
-					addElement(node, 'sub', function () {
-						addText(this, token);
-					});
-					break;
-				default:
-					if (token !== '^' && token !== '_')
-						addText(node, token);
-					break;
-			}
-			lastToken = token;
-		});
-	}
-	
-	function addElement(node, elementName, callback) {
-		var element = document.createElement(elementName);
-		if (callback)
-			callback.call(element);
-		node.appendChild(element);
-		return element;
-	}
-	
+], function (
+	init,
+	ui,
+	Mesh,
+	Shader,
+	Program,
+	Texture,
+	Framebuffer,
+	Drawable,
+	vertSrc,
+	skyFragSrc,
+	toneFragSrc
+) {
 	function addInput(list, label, symbol, unit, callback) {
 		var input;
-		addElement(list, 'li', function () {
-			addElement(this, 'i', function () {
+		ui.addElement(list, 'li', function () {
+			ui.addElement(this, 'i', function () {
 				this.style.display = 'inline-block';
 				this.style.width   = '6em';
-				addFormattedText(this, symbol);
+				ui.addFormattedText(this, symbol);
 			});
-			addElement(this, 'i', function () {
+			ui.addElement(this, 'i', function () {
 				this.style.display = 'inline-block';
 				this.style.width   = '4em';
 				if (unit)
-					addFormattedText(this, '('+unit+')');
+					ui.addFormattedText(this, '('+unit+')');
 			});
-			addElement(this, 'span', function () {
+			ui.addElement(this, 'span', function () {
 				this.style.display = 'inline-block';
 				this.style.width   = '20em';
-				addText(this, label);
+				ui.addText(this, label);
 			});
-			input = addElement(this, 'input', function () {
+			input = ui.addElement(this, 'input', function () {
 				this.style.width = '6em'
 				this.type = 'number';
 				callback.call(this);
@@ -84,7 +60,7 @@ define([
 		b: 475e-9
 	};
 	function createUI(div, values) {
-		var list = addElement(div, 'ul', null);
+		var list = ui.addElement(div, 'ul', null);
 		addInput(list, 'Earth\'s radius', 'r_{earth}', 'm', function () {
 				this.min   = 0.0;
 				this.step  = 1e3;
