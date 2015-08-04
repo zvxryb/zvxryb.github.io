@@ -27,14 +27,25 @@ define(['math'], function (math) {
 		return new Matrix(data);
 	};
 	
-	Matrix.rotY = function (t) {
-		var c = Math.cos(t);
-		var s = Math.sin(t);
-		var data = [
-			[ c,  0,  s],
-			[ 0,  1,  0],
-			[-s,  0,  c]
-		];
+	Matrix.rot = function (v) {
+		var theta = math.norm(v);
+		var u = math.divide(v, theta);
+		var cos_theta = math.cos(theta);
+		var sin_theta = math.sin(theta);
+		var data = u.map(function (a, i) {
+			return u.map(function (b, j) {
+				c = function () {
+					if (i == 0 && j == 1) return -sin_theta * u[2];
+					if (i == 0 && j == 2) return  sin_theta * u[1];
+					if (i == 1 && j == 0) return  sin_theta * u[2];
+					if (i == 1 && j == 2) return -sin_theta * u[0];
+					if (i == 2 && j == 0) return -sin_theta * u[1];
+					if (i == 2 && j == 1) return  sin_theta * u[0];
+					return cos_theta;
+				}();
+				return a * b * (1 - cos_theta) + c;
+			});
+		});
 		return new Matrix(data);
 	};
 	

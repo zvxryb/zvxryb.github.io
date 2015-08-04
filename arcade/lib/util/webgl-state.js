@@ -7,8 +7,10 @@ define([], function () {
 		this.arrayBuffer = null;
 		this.elementArrayBuffer = null;
 		this.program = null;
+		this.renderbuffer = null;
 		this.framebuffer = null;
 		this.viewport = gl.getParameter(gl.VIEWPORT);
+		this.capabilities = {}
 		
 		this.activeTexture = 0;
 		var n = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
@@ -16,6 +18,35 @@ define([], function () {
 		for (var i = 0; i < n; ++i)
 			this.textureImageUnits[i] = null;
 	}
+	
+	State.prototype.withCapability = function () {
+		function setCapability(gl, cap, enable) {
+			return enable ? gl.enable(cap) : gl.disable(cap);
+		}
+		return function (cap, enable, callback) {
+			var gl = this.gl;
+			
+			var key = 'cap' + cap.toString();
+			var original = function () {
+				if (this.capabilities.hasOwnProperty(key))
+					return this.capabilities[key];
+				return gl.isEnabled(cap);
+			}
+			
+			setCapability(gl, cap, enable);
+			this.capabilities[key] = enable;
+			
+			var result;
+			try {
+				result = callback();
+			} finally {
+				setCapability(gl, cap, original);
+				this.capabilities[key] = original;
+			}
+			
+			return result;
+		}
+	}();
 	
 	State.prototype.withBuffer = function (target, buf, callback) {
 		var gl = this.gl;
@@ -111,6 +142,24 @@ define([], function () {
 				gl.bindTexture(target, texture);
 				gl.activeTexture(gl.TEXTURE0 + index);
 			}).apply(null, original);
+		}
+		
+		return result;
+	};
+	
+	State.prototype.withRenderbuffer = function (renderbuffer, callback) {
+		var gl = this.gl;
+		var original = this.renderbuffer;
+		
+		gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+		this.renderbuffer = renderbuffer;
+		
+		var result;
+		try {
+			result = callback();
+		} finally {
+			gl.bindRenderbuffer(gl.RENDERBUFFER, original);
+			this.renderbuffer = original;
 		}
 		
 		return result;
