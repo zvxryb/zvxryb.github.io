@@ -35,13 +35,12 @@ $ml-code-number-fg:   #40ff40;
 $ml-code-meta-fg:     #ff4040;
 
 $ml-title-font: 'Cinzel', serif;
-$ml-title-height: 8em;
-$ml-title-width: 16em;
+$ml-title-height: 8rem;
+$ml-title-width: 18rem;
 $ml-text-font:  'Droid Sans', sans-serif;
 $ml-fixed-font: 'Inconsolata', monospace;
-$ml-text-size:  11pt;
-$ml-content-width:  60em;
-$ml-content-padding: 2em;
+$ml-content-width:  60rem;
+$ml-content-padding: 2rem;
 $ml-total-width: $ml-title-width + $ml-content-width + 2 * $ml-content-padding;
 
 @mixin headings {
@@ -63,10 +62,13 @@ $ml-total-width: $ml-title-width + $ml-content-width + 2 * $ml-content-padding;
 * {
 	padding: 0;
 	margin:  0;
+	max-height: 10000000px; /* disable "font boosting" */
 }
 
 html {
 	height: 100%;
+	font-size: 11pt;
+	@media (min-resolution: 2dppx) { font-size: 16pt; }
 }
 
 body {
@@ -83,7 +85,6 @@ body {
 	background-color: $ml-primary-dark-bg;
 	color:            $ml-primary-fg;
 	font-family:      $ml-text-font;
-	font-size:        $ml-text-size;
 
 	a         { color: $ml-primary-link-fg;    }
 	a:hover   { color: $ml-primary-hover-fg;   }
@@ -110,8 +111,8 @@ pre, code {
 a { text-decoration: inherit; }
 
 p {
-	margin-top:    1.0em;
-	margin-bottom: 1.0em;
+	margin-top:    1.0rem;
+	margin-bottom: 1.0rem;
 	line-height:   200%;
 }
 
@@ -122,7 +123,7 @@ p {
 
 $header_size: 1.025;
 @for $i from 0 to 6 {
-	h#{6 - $i} { font-size: $header_size * 1em; }
+	h#{6 - $i} { font-size: $header_size * 1rem; }
 	$header_size: $header_size * $header_size;
 }
 
@@ -131,13 +132,13 @@ ul {
 }
 
 @include lists {
-	margin-top:    1.0em;
-	margin-bottom: 1.0em;
+	margin-top:    1.0rem;
+	margin-bottom: 1.0rem;
 
 	> li {
-		padding-left:   5.0em;
-		padding-top:    0.4em;
-		padding-bottom: 0.4em;
+		padding-left:   5.0rem;
+		padding-top:    0.4rem;
+		padding-bottom: 0.4rem;
 	}
 	> li:nth-child(even) { background-color: $ml-primary-dark-bg;  }
 	> li:nth-child(odd)  { background-color: $ml-primary-light-bg; }
@@ -158,7 +159,7 @@ input {
 	border-style: solid;
 	border-width: 1px;
 	border-color: $ml-primary-bg - #181818;
-	padding: 0.2em;
+	padding: 0.2rem;
 }
 
 input:disabled {
@@ -210,14 +211,14 @@ input[type=number] {
 
 	> h1 {
 		text-align:    center;
-		margin-top:    0.80em;
-		margin-bottom: 0.25em;
+		margin-top:    0.80rem;
+		margin-bottom: 0.25rem;
 	}
 
 	> h2 {
 		text-align:    right;
-		margin-right:  2.00em;
-		margin-top:    0.25em;
+		margin-right:  2.00rem;
+		margin-top:    0.25rem;
 		border-bottom: none;
 	}
 }
@@ -238,8 +239,8 @@ input[type=number] {
 	align-items: stretch;
 
 	.ml-item {
-		min-width: 8em;
-		padding: 1em;
+		min-width: 8rem;
+		padding: 1rem;
 	}
 
 	.ml-item:nth-child(odd) {
@@ -256,7 +257,7 @@ input[type=number] {
 #ml-content {
 	flex-grow: 1;
 
-	min-width: 40em;
+	min-width: 40rem;
 	max-width: $ml-content-width;
 
 	padding-left:  $ml-content-padding;
@@ -264,8 +265,8 @@ input[type=number] {
 }
 
 .ml-post, .ml-section {
-	margin-top: 2em;
-	margin-bottom: 2em;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 
 	.ml-header {
 		display: flex;
@@ -273,10 +274,10 @@ input[type=number] {
 		flex-wrap: nowrap;
 		align-items: flex-end;
 
-		padding-left:   1.0em;
-		padding-right:  1.0em;
-		padding-top:    0.5em;
-		padding-bottom: 0.5em;
+		padding-left:   1.0rem;
+		padding-right:  1.0rem;
+		padding-top:    0.5rem;
+		padding-bottom: 0.5rem;
 
 		border-bottom-style: solid;
 		border-bottom-width: 1px;
@@ -298,29 +299,29 @@ input[type=number] {
 		background-color: $ml-primary-bg;
 		           color: $ml-primary-fg;
 
-		padding:  1em;
+		padding:  1rem;
 
-		p { padding-left: 3em; }
+		p { padding-left: 3rem; }
 
 		pre {
 			font-family: $ml-fixed-font;
-			margin-top:     1em;
-			margin-bottom:  1em;
-			margin-left:   -1em;
-			margin-right:  -1em;
-			padding-top:    1em;
-			padding-bottom: 1em;
-			padding-left:   6em;
-			padding-right:  1em;
+			margin-top:     1rem;
+			margin-bottom:  1rem;
+			margin-left:   -1rem;
+			margin-right:  -1rem;
+			padding-top:    1rem;
+			padding-bottom: 1rem;
+			padding-left:   6rem;
+			padding-right:  1rem;
 			overflow-x: auto;
 		}
 	}
 
 	.ml-footer {
-		padding-left:   1.0em;
-		padding-right:  1.0em;
-		padding-top:    0.5em;
-		padding-bottom: 0.5em;
+		padding-left:   1.0rem;
+		padding-right:  1.0rem;
+		padding-top:    0.5rem;
+		padding-bottom: 0.5rem;
 
 		border-top-style: solid;
 		border-top-width: 1px;
@@ -338,5 +339,5 @@ input[type=number] {
 .ml-left  { text-align: left;  }
 .ml-right { text-align: right; }
 
-.ml-indent { padding-left: 2em; }
+.ml-indent { padding-left: 2rem; }
 
