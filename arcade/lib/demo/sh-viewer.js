@@ -10,9 +10,6 @@ define([
 	'arcade/util/webgl-matrix',
 	'arcade/util/webgl-shader',
 	'arcade/util/webgl-program',
-	'arcade/util/webgl-texture',
-	'arcade/util/webgl-renderbuffer',
-	'arcade/util/webgl-framebuffer',
 	'arcade/util/webgl-drawable',
 	'lib/text!arcade/shader/sh-deform.vert',
 	'lib/text!arcade/shader/sh-color.frag',
@@ -25,9 +22,6 @@ define([
 	Matrix,
 	Shader,
 	Program,
-	Texture,
-	Renderbuffer,
-	Framebuffer,
 	Drawable,
 	vertSrc,
 	fragSrc
@@ -152,9 +146,6 @@ define([
 		
 		var sphereMesh = sphere(4);
 		var sphereDrawable = new Drawable(state, sphereMesh);
-		
-		var quadMesh = Mesh.square();
-		var quadDrawable = new Drawable(state, quadMesh);
 		
 		var view = Matrix.identity(4);
 		var proj = Matrix.ortho(2 * w / h, 2, 10);
