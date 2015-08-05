@@ -40,6 +40,9 @@ $ml-title-width: 16em;
 $ml-text-font:  'Droid Sans', sans-serif;
 $ml-fixed-font: 'Inconsolata', monospace;
 $ml-text-size:  11pt;
+$ml-content-width:  60em;
+$ml-content-padding: 2em;
+$ml-total-width: $ml-title-width + $ml-content-width + 2 * $ml-content-padding;
 
 @mixin headings {
 	h1, h2, h3, h4, h5, h6 { @content }
@@ -50,11 +53,11 @@ $ml-text-size:  11pt;
 }
 
 @mixin portrait {
-	@media all and (orientation:portrait) { @content; }
+	@media (orientation:portrait), (max-width: $ml-total-width) { @content; }
 }
 
 @mixin landscape {
-	@media all and (orientation:landscape) { @content; }
+	@media (orientation:landscape) and (min-width: $ml-total-width) { @content; }
 }
 
 * {
@@ -254,10 +257,10 @@ input[type=number] {
 	flex-grow: 1;
 
 	min-width: 40em;
-	max-width: 60em;
+	max-width: $ml-content-width;
 
-	padding-left:  2em;
-	padding-right: 2em;
+	padding-left:  $ml-content-padding;
+	padding-right: $ml-content-padding;
 }
 
 .ml-post, .ml-section {
