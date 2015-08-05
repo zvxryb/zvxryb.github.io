@@ -27,11 +27,11 @@ define([], function () {
 			var gl = this.gl;
 			
 			var key = 'cap' + cap.toString();
-			var original = function () {
+			var original = (function () {
 				if (this.capabilities.hasOwnProperty(key))
 					return this.capabilities[key];
 				return gl.isEnabled(cap);
-			}
+			}).call(this);
 			
 			setCapability(gl, cap, enable);
 			this.capabilities[key] = enable;
