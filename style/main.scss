@@ -35,7 +35,6 @@ $ml-code-number-fg:   #40ff40;
 $ml-code-meta-fg:     #ff4040;
 
 $ml-title-font: 'Cinzel', serif;
-$ml-title-height: 8rem;
 $ml-title-width: 18rem;
 $ml-text-font:  'Droid Sans', sans-serif;
 $ml-fixed-font: 'Inconsolata', monospace;
@@ -171,7 +170,6 @@ input[type=number] {
 }
 
 #ml-header {
-	min-height: $ml-title-height;
 	min-width:  $ml-title-width;
 	
 	@include portrait { align-self: stretch; }
@@ -183,8 +181,10 @@ input[type=number] {
 	background-color: $ml-accent-bg;
 	           color: $ml-accent-fg;
 
-	@include headings {
-		border-bottom: 1px solid $ml-accent-dull-fg;
+	@include landscape {
+		@include headings {
+			border-bottom: 1px solid $ml-accent-dull-fg;
+		}
 	}
 
 	a {
@@ -206,7 +206,6 @@ input[type=number] {
 }
 
 #ml-title {
-	min-height: $ml-title-height;
 	min-width:  $ml-title-width;
 
 	> h1 {
@@ -219,7 +218,16 @@ input[type=number] {
 		text-align:    right;
 		margin-right:  2.00rem;
 		margin-top:    0.25rem;
+		margin-bottom: 0.80rem;
 		border-bottom: none;
+	}
+	
+	@include portrait {
+		> h1, > h2 { display: inline-block; }
+		> h1 {
+			padding-left:  1.2rem;
+			padding-right: 1.2rem;
+		}
 	}
 }
 
@@ -240,7 +248,21 @@ input[type=number] {
 
 	.ml-item {
 		min-width: 8rem;
-		padding: 1rem;
+		padding: 1.5rem;
+		
+		.ml-icon {
+			float: right;
+			color: $ml-accent-dull-fg;
+		}
+		
+		@include portrait {
+			min-width: 0;
+			.ml-text { display: none; }
+			.ml-icon {
+				float: none;
+				color: inherit;
+			}
+		}
 	}
 
 	.ml-item:nth-child(odd) {
