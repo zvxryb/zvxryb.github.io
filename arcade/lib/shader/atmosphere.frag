@@ -1,3 +1,5 @@
+---
+---
 /* copyright 2015 by mike lodato (zvxryb@gmail.com)
  * this work is subject to the terms of the MIT license */
 
@@ -12,6 +14,8 @@ uniform float beta_M;  // Mie scattering coefficient, m^-1
 uniform float g;       // phase eccentricity
 
 varying vec2 vTexCoord;
+
+{% include_relative paraboloid-unproject.glsl %}
 
 bool occlude(vec3 orig, vec3 dir) {
 	vec3 center = vec3(0.0, 0.0, -r_earth);
@@ -37,11 +41,9 @@ vec4 toRGBE(vec3 c) {
 
 void main(void) {
 	vec2 xy = 2.0 * vTexCoord - 1.0;
-	float z = (1.0 - dot(xy, xy)) / 2.0;
-	if (z < 0.0)
+	vec3 dir_eye = paraboloid_unproject(xy);
+	if (dir_eye.z < 0.0)
 		discard;
-	
-	vec3 dir_eye = normalize(vec3(xy, z));
 	
 	float dist_eye = trace(vec3(0, 0, 0), dir_eye);
 	
