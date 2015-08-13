@@ -24,15 +24,15 @@ $ml-accent-light-fg:     $ml-accent-fg + #040404;
 $ml-accent-dark-bg:      $ml-accent-bg - #040404;
 $ml-accent-dark-fg:      $ml-accent-fg - #040404;
 
-$ml-code-bg:          $ml-accent-bg + #101010;
-$ml-code-fg:          $ml-accent-fg - #202020;
-$ml-code-comment-fg:  $ml-code-fg   - #606060;
-$ml-code-operator-fg: #ffffff;
-$ml-code-keyword-fg:  #8040ff;
-$ml-code-storage-fg:  #4080ff;
-$ml-code-function-fg: #ffa040;
-$ml-code-number-fg:   #40ff40;
-$ml-code-meta-fg:     #ff4040;
+$ml-code-bg:          $ml-primary-dark-bg - #040404;
+$ml-code-fg:          $ml-primary-fg - #202020;
+$ml-code-comment-fg:  $ml-code-fg    + #808080;
+$ml-code-operator-fg: #000000;
+$ml-code-keyword-fg:  #4020d0;
+$ml-code-storage-fg:  #2040d0;
+$ml-code-function-fg: #d08020;
+$ml-code-number-fg:   #20a020;
+$ml-code-meta-fg:     #d02020;
 
 $ml-title-font: 'Cinzel', serif;
 $ml-title-width: 18rem;
