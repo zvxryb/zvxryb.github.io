@@ -24,7 +24,7 @@ $ml-accent-light-fg:     $ml-accent-fg + #040404;
 $ml-accent-dark-bg:      $ml-accent-bg - #040404;
 $ml-accent-dark-fg:      $ml-accent-fg - #040404;
 
-$ml-code-bg:          $ml-accent-bg;
+$ml-code-bg:          $ml-accent-bg + #101010;
 $ml-code-fg:          $ml-accent-fg - #202020;
 $ml-code-comment-fg:  $ml-code-fg   - #606060;
 $ml-code-operator-fg: #ffffff;
@@ -38,9 +38,11 @@ $ml-title-font: 'Cinzel', serif;
 $ml-title-width: 18rem;
 $ml-text-font:  'Droid Sans', sans-serif;
 $ml-fixed-font: 'Inconsolata', monospace;
-$ml-content-width:  60rem;
+$ml-content-min-width: 40rem;
+$ml-content-max-width: 60rem;
 $ml-content-padding: 2rem;
-$ml-total-width: $ml-title-width + $ml-content-width + 2 * $ml-content-padding;
+$ml-total-min-width: $ml-title-width + $ml-content-min-width + 2 * $ml-content-padding;
+$ml-total-max-width: $ml-title-width + $ml-content-max-width + 2 * $ml-content-padding;
 
 @mixin headings {
 	h1, h2, h3, h4, h5, h6 { @content }
@@ -51,11 +53,11 @@ $ml-total-width: $ml-title-width + $ml-content-width + 2 * $ml-content-padding;
 }
 
 @mixin portrait {
-	@media (orientation:portrait), (max-width: $ml-total-width) { @content; }
+	@media (orientation:portrait), (max-width: $ml-total-max-width) { @content; }
 }
 
 @mixin landscape {
-	@media (orientation:landscape) and (min-width: $ml-total-width) { @content; }
+	@media (orientation:landscape) and (min-width: $ml-total-max-width) { @content; }
 }
 
 * {
@@ -72,6 +74,8 @@ html {
 
 body {
 	display: flex;
+
+	min-width: $ml-total-min-width;
 
 	@include portrait  { flex-direction: column; }
 	@include landscape { flex-direction: row;    }
@@ -90,8 +94,10 @@ body {
 	a:visited { color: $ml-primary-visited-fg; }
 }
 
-pre, code {
+.ml-code-block, pre, code {
 	font-family: $ml-fixed-font;
+}
+.ml-code-block {
 	           color: $ml-code-fg;
 	background-color: $ml-code-bg;
 	.comment                  { color: $ml-code-comment-fg;  }
@@ -128,6 +134,20 @@ $header_size: 1.025;
 
 ul {
 	list-style-type: none;
+}
+
+ol {
+	list-style-type: none;
+	counter-reset: itemNumber;
+	> li::before {
+		display: inline-block;
+		width:         2.0rem;
+		margin-left:  -2.5rem;
+		padding-right: 0.5rem;
+		counter-increment: itemNumber;
+		content: counter(itemNumber) ")";
+		text-align: right;
+	}
 }
 
 @include lists {
@@ -280,7 +300,7 @@ input[type=number] {
 	flex-grow: 1;
 
 	min-width: 40rem;
-	max-width: $ml-content-width;
+	max-width: $ml-content-max-width;
 
 	padding-left:  $ml-content-padding;
 	padding-right: $ml-content-padding;
@@ -325,17 +345,48 @@ input[type=number] {
 
 		p { padding-left: 3rem; }
 
-		pre {
+		.ml-code-block {
 			font-family: $ml-fixed-font;
+			font-size: 10pt;
 			margin-top:     1rem;
 			margin-bottom:  1rem;
 			margin-left:   -1rem;
 			margin-right:  -1rem;
+			
+			div {
+				position: relative;
+				overflow:hidden;
+				.ml-fade-down {
+					position: absolute;
+					height: 10rem;
+					left:    0;
+					right:   0;
+					bottom:  0;
+					background: linear-gradient(to bottom, rgba($ml-code-bg, 0.0), $ml-code-bg);
+				}
+			}
+			
+			.ml-full {
+				max-height: none;
+				overflow-y: hidden;
+				overflow-x: auto;
+			}
+			.ml-partial {
+				max-height: 40rem;
+				overflow-y: hidden;
+				overflow-x: hidden;
+			}
+			
+			.ml-toggle {
+				padding-bottom: 1rem;
+				text-align: center;
+			}
+		}
+		pre {
 			padding-top:    1rem;
 			padding-bottom: 1rem;
 			padding-left:   6rem;
 			padding-right:  1rem;
-			overflow-x: auto;
 		}
 	}
 

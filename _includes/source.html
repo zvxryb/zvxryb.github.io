@@ -1,15 +1,49 @@
-<div id='{{ include.id }}'></div>
+<div id='{{ include.id }}' class='ml-code-block'>
+	<div>
+		<pre class='ml-partial' id='{{ include.id }}-pre'><code id='{{ include.id }}-code'></code></pre>
+		<div id='{{ include.id }}-fade' class='ml-fade-down'></div>
+	</div>
+	<div id='{{ include.id }}-toggle' class='ml-toggle'>
+		<i id='{{ include.id }}-up' class='fa fa-chevron-up fa-2x' style='display:none;'></i>
+		<i id='{{ include.id }}-down' class='fa fa-chevron-down fa-2x'></i>
+	</div>
+</div>
 <script>
 	require(['lib/text!{{ include.path }}'], function (src) {
-		var div0 = document.getElementById('{{ include.id }}');
-		var div1 = document.createElement('div');
-		var text = document.createTextNode(src);
-		var code = document.createElement('pre');
-		code.dataset.language = '{{ include.language }}';
-		code.appendChild(text);
-		div1.appendChild(code);
-		Rainbow.color(div1, function() {
-			div0.appendChild(div1);
+		var div        = document.getElementById('{{ include.id }}');
+		var pre        = document.getElementById('{{ include.id }}-pre');
+		var code       = document.getElementById('{{ include.id }}-code');
+		var fade       = document.getElementById('{{ include.id }}-fade');
+		var toggleDiv  = document.getElementById('{{ include.id }}-toggle');
+		var toggleUp   = document.getElementById('{{ include.id }}-up');
+		var toggleDown = document.getElementById('{{ include.id }}-down');
+		
+		var toggle = function (pre) {
+			var expanded = false;
+			return function (e) {
+				if (expanded = !expanded) {
+					pre.className = 'ml-full';
+					fade.style.visibility = 'hidden';
+					toggleUp  .style.display = 'inline';
+					toggleDown.style.display = 'none';
+				} else {
+					pre.className = 'ml-partial'
+					fade.style.visibility = 'visible';
+					toggleUp  .style.display = 'none';
+					toggleDown.style.display = 'inline';
+				}
+			}
+		};
+		Rainbow.color(src, '{{include.language}}', function(highlighted) {
+			code.innerHTML = highlighted;
+			var overflow = pre.scrollHeight / pre.clientHeight;
+			if (overflow > 1.5) {
+				toggleDiv.addEventListener('click', toggle(pre));
+			} else {
+				pre.className = 'ml-full';
+				fade.style.visibility = 'hidden';
+				toggleDiv.style.display = 'none';
+			}
 		});
 	});
 </script>
