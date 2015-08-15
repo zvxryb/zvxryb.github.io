@@ -137,10 +137,8 @@ define([
 		};
 		createUI(demo.div, data);
 		
-		var vert = new Shader(state, gl.VERTEX_SHADER, vertSrc,
-			['position'], ['mvp', 'deform', 'harmonics']);
-		var frag = new Shader(state, gl.FRAGMENT_SHADER, fragSrc, [],
-			['harmonics']);
+		var vert = new Shader(state, gl.VERTEX_SHADER,   vertSrc);
+		var frag = new Shader(state, gl.FRAGMENT_SHADER, fragSrc);
 		
 		var prog = new Program(state, vert, frag);
 		

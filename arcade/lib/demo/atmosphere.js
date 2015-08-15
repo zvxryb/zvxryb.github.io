@@ -172,10 +172,8 @@ define([
 		
 		var sky = new Sky(state, 512);
 		
-		var vert = new Shader(state, gl.VERTEX_SHADER, vertSrc, ['position'],
-			['scale', 'offset']);
-		var frag = new Shader(state, gl.FRAGMENT_SHADER, fragSrc, [],
-			['exposure', 'color']);
+		var vert = new Shader(state, gl.VERTEX_SHADER,   vertSrc);
+		var frag = new Shader(state, gl.FRAGMENT_SHADER, fragSrc);
 		var prog = new Program(state, vert, frag);
 		
 		var mesh = Mesh.square();
