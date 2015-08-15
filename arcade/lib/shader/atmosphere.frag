@@ -17,6 +17,8 @@ varying vec2 vTexCoord;
 
 {% include_relative paraboloid-unproject.glsl %}
 
+{% include_relative rgbe8-unsigned.glsl %}
+
 bool occlude(vec3 orig, vec3 dir) {
 	vec3 center = vec3(0.0, 0.0, -r_earth);
 	vec3 offset = center - orig;
@@ -30,13 +32,6 @@ float trace (vec3 orig, vec3 dir) {
 	vec3 offset = center - orig;
 	float t = dot(dir, offset);
 	return t + sqrt(t*t - dot(offset, offset) + r_sky*r_sky);
-}
-
-vec4 toRGBE(vec3 c) {
-	vec3 c_abs = abs(c);
-	float x = max(c_abs.r, max(c_abs.g, c_abs.b));
-	float y = ceil(log2(x));
-	return x <= 0.0 ? vec4(0) : vec4(c / exp2(y), (y + 128.0) / 255.0);
 }
 
 void main(void) {

@@ -180,23 +180,11 @@ define([
 				gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 			
 				state.withCapability(gl.DEPTH_TEST, true, function () {
-					prog.use(function (attributes, uniforms) {
-						uniforms.forEach(function (uniform) {
-							(function (key, location) {
-								switch (key) {
-									case 'mvp':
-										mvp.use(state, location);
-										break;
-									case 'deform':
-										gl.uniform1f(location, data.deform);
-										break;
-									case 'harmonics':
-										gl.uniform1fv(location, data.values);
-										break;
-									default:
-										throw 'unknown uniform';
-								}
-							}).apply(null, uniform);
+					prog.use(function (attributes, setUniforms) {
+						setUniforms({
+							mvp: mvp,
+							deform: data.deform,
+							harmonics: data.values
 						});
 						sphereDrawable.draw(attributes);
 					});

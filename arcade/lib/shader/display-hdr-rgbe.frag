@@ -16,10 +16,7 @@ vec3 tonemap(vec3 x) {
 
 {% include_relative srgb-encode.glsl %}
 
-vec3 fromRGBE(vec4 rgbe) {
-	float v = exp2(255.0 * rgbe.a - 128.0);
-	return v * rgbe.rgb;
-}
+{% include_relative rgbe8-unsigned.glsl %}
 
 void main(void) {
 	vec4 c = texture2D(color, vTexCoord);

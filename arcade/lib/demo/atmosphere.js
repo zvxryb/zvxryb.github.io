@@ -3,28 +3,24 @@
 
 define([
 	'arcade/util/demo-init',
+	'arcade/util/env-sky',
 	'arcade/util/html-ui',
 	'arcade/util/mesh',
 	'arcade/util/webgl-shader',
 	'arcade/util/webgl-program',
-	'arcade/util/webgl-texture',
-	'arcade/util/webgl-framebuffer',
 	'arcade/util/webgl-drawable',
 	'lib/text!arcade/shader/blit.vert',
-	'lib/text!arcade/shader/atmosphere.frag',
 	'lib/text!arcade/shader/display-hdr-rgbe.frag'
 ], function (
 	init,
+	Sky,
 	ui,
 	Mesh,
 	Shader,
 	Program,
-	Texture,
-	Framebuffer,
 	Drawable,
 	vertSrc,
-	skyFragSrc,
-	toneFragSrc
+	fragSrc
 ) {
 	function addInput(list, label, symbol, unit, callback) {
 		var input;
@@ -174,100 +170,51 @@ define([
 		};
 		var widgets = createUI(demo.div, values);
 		
-		var vert     = new Shader(state, gl.VERTEX_SHADER, vertSrc, ['position'],
-			['scale', 'offset']);
-		var skyFrag  = new Shader(state, gl.FRAGMENT_SHADER, skyFragSrc, [],
-			['r_earth', 'h_sky', 'E_sun', 'dir_sun', 'beta_R', 'beta_M', 'g']);
-		var toneFrag = new Shader(state, gl.FRAGMENT_SHADER, toneFragSrc, [],
-			['exposure', 'color']);
-		var skyProg  = new Program(state, vert, skyFrag );
-		var toneProg = new Program(state, vert, toneFrag);
+		var sky = new Sky(state, 512);
 		
-		var texture = Texture.create(state, gl.CLAMP_TO_EDGE, false, false,
-			gl.RGBA, 512, gl.RGBA, gl.UNSIGNED_BYTE, null);
-		var framebuffer = new Framebuffer(state, 512, 512, {color: texture});
+		var vert = new Shader(state, gl.VERTEX_SHADER, vertSrc, ['position'],
+			['scale', 'offset']);
+		var frag = new Shader(state, gl.FRAGMENT_SHADER, fragSrc, [],
+			['exposure', 'color']);
+		var prog = new Program(state, vert, frag);
 		
 		var mesh = Mesh.square();
 		var drawable = new Drawable(state, mesh);
 		
 		var f = 0.1;
 		function draw(time) {
-			framebuffer.use(function () {
-				gl.clearColor(1, 1, 1, 0);
-				gl.clear(gl.COLOR_BUFFER_BIT);
-			
-				var theta  = 1.4 * Math.PI * ((f * time/1000) % 1) - 0.7 * Math.PI;
-				var sunDir = [Math.sin(theta), 0, Math.cos(theta)];
-				skyProg.use(function(attributes, uniforms) {
-					uniforms.forEach(function (uniform) {
-						(function (key, location) {
-							switch (key) {
-								case 'r_earth':
-									gl.uniform1f(location, values.r_earth);
-									break;
-								case 'h_sky':
-									gl.uniform1f(location, values.h_sky);
-									break;
-								case 'E_sun':
-									gl.uniform3f(location,
-										values.E_sun.r,
-										values.E_sun.g,
-										values.E_sun.b);
-									break;
-								case 'dir_sun':
-									gl.uniform3fv(location, sunDir);
-									break;
-								case 'beta_R':
-									gl.uniform3f(location,
-										values.beta_R.r,
-										values.beta_R.g,
-										values.beta_R.b);
-									break;
-								case 'beta_M':
-									gl.uniform1f(location, values.beta_M);
-									break;
-								case 'g':
-									gl.uniform1f(location, values.g);
-									break;
-								case 'scale':
-									gl.uniform2fv(location, [1.0, 1.0]);
-									break;
-								case 'offset':
-									gl.uniform2fv(location, [0.0, 0.0]);
-									break;
-								default:
-									throw 'unknown uniform';
-							}
-						}).apply(null, uniform);
-					});
-					drawable.draw(attributes);
-				});
+			var theta  = 1.4 * Math.PI * ((f * time/1000) % 1) - 0.7 * Math.PI;
+			var sunDir = [Math.sin(theta), 0, Math.cos(theta)];
+			sky.draw({
+				r_earth: values.r_earth,
+				h_sky: values.h_sky,
+				E_sun: [
+					values.E_sun.r,
+					values.E_sun.g,
+					values.E_sun.b
+				],
+				dir_sun: sunDir,
+				beta_R: [
+					values.beta_R.r,
+					values.beta_R.g,
+					values.beta_R.b
+				],
+				beta_M: values.beta_M,
+				g: values.g,
+				scale:  [1.0, 1.0],
+				offset: [0.0, 0.0]
 			});
 			
 			gl.clearColor(0, 0, 0, 0);
 			gl.clear(gl.COLOR_BUFFER_BIT);
-			toneProg.use(function(attributes, uniforms) {
-				uniforms.forEach(function (uniform) {
-					(function (key, location) {
-						switch (key) {
-							case 'exposure':
-								gl.uniform1f(location, 0.2);
-								break;
-							case 'color':
-								gl.uniform1i(location, 0);
-								break;
-							case 'scale':
-								gl.uniform2fv(location, [h/w, 1.0]);
-								break;
-							case 'offset':
-								gl.uniform2fv(location, [0.0, 0.0]);
-								break;
-							default:
-								throw 'unknown uniform';
-						}
-					}).apply(null, uniform);
+			prog.use(function(attributes, setUniforms) {
+				setUniforms({
+					exposure: 0.2,
+					color: 0,
+					scale:  [h/w, 1.0],
+					offset: [0.0, 0.0]
 				});
-				texture.use(0, function () {
+				sky.use(0, function () {
 					drawable.draw(attributes);
 				});
 			});
