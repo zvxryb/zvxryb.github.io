@@ -15,7 +15,7 @@ uniform float g;       // phase eccentricity
 
 varying vec2 vTexCoord;
 
-{% include_relative paraboloid-unproject.glsl %}
+{% include_relative paraboloid-project.glsl %}
 
 {% include_relative rgbe8-unsigned.glsl %}
 
