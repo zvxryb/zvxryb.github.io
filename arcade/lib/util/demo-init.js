@@ -17,7 +17,13 @@ define(['arcade/util/webgl-state'], function (State) {
 		canvas.style.margin    = '1em';
 		canvas.style.alignSelf = 'center';
 		
-		var gl = canvas.getContext('webgl');
+		var gl = null;
+		var contextList = ['webgl', 'experimental-webgl'];
+		for (var i = 0; i < contextList.length && !gl; ++i) {
+			gl = canvas.getContext(contextList[i], {
+				premultipliedAlpha: false
+			});
+		}
 		if (!gl) {
 			var text = document.createTextNode(
 				'WebGL is unsupported by your browser or graphics hardware');
