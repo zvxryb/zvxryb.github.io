@@ -27,8 +27,26 @@ define(['math'], function (math) {
 		return new Matrix(data);
 	};
 	
+	Matrix.frustum = function (dx, dy, z0, z1) {
+		var dz = (z1 - z0);
+		var data = [
+			[2/dx,    0,      0,         0],
+			[   0, 2/dy,      0,         0],
+			[   0,    0, -z1/dz, -z1*z0/dz],
+			[   0,    0,     -1,         0]
+		];
+		return new Matrix(data);
+	};
+	
+	Matrix.perspective = function (fov, ratio, z0, z1) {
+		var dydz = math.tan(fov/2);
+		var dxdz = ratio * dydz;
+		return Matrix.frustum(2*dxdz, 2*dydz, z0, z1);
+	};
+	
 	Matrix.rot = function (v) {
 		var theta = math.norm(v);
+		if (theta < 0.000001) return Matrix.identity(3)
 		var u = math.divide(v, theta);
 		var cos_theta = math.cos(theta);
 		var sin_theta = math.sin(theta);
