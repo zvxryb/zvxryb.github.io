@@ -10,6 +10,7 @@ define([], function () {
 		this.renderbuffer = null;
 		this.framebuffer = null;
 		this.viewport = gl.getParameter(gl.VIEWPORT);
+		this.scissor  = gl.getParameter(gl.SCISSOR_BOX);
 		this.capabilities = {}
 		
 		this.activeTexture = 0;
@@ -201,7 +202,27 @@ define([], function () {
 		}
 		
 		return result;
-	}
+	};
+	
+	State.prototype.withScissor = function (x, y, w, h, callback) {
+		var gl = this.gl;
+		var original = this.scissor;
+		
+		gl.scissor(x, y, w, h);
+		this.scissor = [x, y, w, h];
+		
+		var result;
+		try {
+			result = callback();
+		} finally {
+			(function (x, y, w, h) {
+				gl.scissor(x, y, w, h);
+			}).apply(null, original);
+			this.scissor = original;
+		}
+		
+		return result;
+	};
 	
 	return State;
 });

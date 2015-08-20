@@ -10,8 +10,16 @@ define([], function () {
 		});
 	}
 	
+	function range(n) {
+		var result = new Array(n);
+		for (var i = 0; i < n; ++i)
+			result[i] = i;
+		return result;
+	}
+	
 	return {
-		unique: unique
+		unique: unique,
+		range: range
 	};
 });
 
