@@ -11,7 +11,7 @@ varying   vec3  vNormal;
 
 const float pi = 3.14159265;
 
-{% include_relative sh-basis.glsl %}
+{% include_relative sh-basis.glsl type='float' %}
 
 void main() {
 	vec3 n = normalize(position);

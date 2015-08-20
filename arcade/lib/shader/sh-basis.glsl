@@ -3,10 +3,10 @@
 	this work is subject to the terms of the MIT license
 {% endcomment%}
 // real-valued spherical harmonics borrowed from Wikipedia
-float sh_lookup(float x[9], vec3 n) {
+{{ include.type }} sh_lookup({{ include.type }} x[9], vec3 n) {
 	vec3 n2 = n * n;
 	
-	float value = 0.0;
+	{{ include.type }} value = {{include.type}}(0.0);
 	value += x[0] * 1.0/2.0 * sqrt(1.0/pi);
 	
 	value += x[1] * sqrt(3.0/4.0/pi) * n.y;
