@@ -1,7 +1,12 @@
 {% for entry in entries %}
 	<div class='ml-post'>
 		<div class='ml-header'>
-			<h1>{{ entry.title }}</h1>
+			<div class='ml-title'>
+				<h1>{{ entry.title }}</h1>
+				{% if entry.subtitle %}
+					<h2>{{ entry.subtitle }}</h2>
+				{% endif %}
+			</div>
 			<span class='ml-date'>{{ entry.date | date: "%Y %b %-d, %a" }}</span>
 		</div>
 		<div class='ml-content'>

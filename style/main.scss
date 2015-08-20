@@ -126,11 +126,9 @@ p {
 	font-weight: 400;
 }
 
-$header_size: 1.025;
-@for $i from 0 to 6 {
-	h#{6 - $i} { font-size: $header_size * 1rem; }
-	$header_size: $header_size * $header_size;
-}
+h1 { font-size: 1.8em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.2em; }
 
 ul {
 	list-style-type: none;
@@ -230,12 +228,14 @@ input[type=number] {
 
 	> h1 {
 		text-align:    center;
+		font-size:     2.40rem;
 		margin-top:    0.80rem;
 		margin-bottom: 0.25rem;
 	}
 
 	> h2 {
 		text-align:    right;
+		font-size:     1.80rem;
 		margin-right:  2.00rem;
 		margin-top:    0.25rem;
 		margin-bottom: 0.80rem;
@@ -325,9 +325,11 @@ input[type=number] {
 		border-bottom-width: 1px;
 		border-bottom-color: $ml-primary-fg;
 
-		h1 {
+		.ml-title {
 			flex-grow: 1;
 			text-align: left;
+			h1 { font-size: 2.2rem; }
+			h2 { font-size: 1.6rem; }
 		}
 
 		.ml-date {
