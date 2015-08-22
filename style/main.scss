@@ -60,6 +60,36 @@ $ml-total-max-width: $ml-title-width + $ml-content-max-width + 2 * $ml-content-p
 	@media (orientation:landscape) and (min-width: $ml-total-max-width) { @content; }
 }
 
+@mixin display-flex {
+	display: -webkit-flex;
+	display: flex;
+}
+
+@mixin align-items($value) {
+	-webkit-align-items: $value;
+	align-items: $value;
+}
+
+@mixin flex-direction($value) {
+	-webkit-flex-direction: $value;
+	flex-direction: $value;
+}
+
+@mixin flex-grow($value) {
+	-webkit-flex-grow: $value;
+	flex-grow: $value;
+}
+
+@mixin flex-wrap($value) {
+	-webkit-flex-wrap: $value;
+	flex-wrap: $value;
+}
+
+@mixin justify-content($value) {
+	-webkit-justify-content: $value;
+	justify-content: $value;
+}
+
 * {
 	padding: 0;
 	margin:  0;
@@ -73,14 +103,14 @@ html {
 }
 
 body {
-	display: flex;
+	@include display-flex;
 
 	min-width: $ml-total-min-width;
 
-	@include portrait  { flex-direction: column; }
-	@include landscape { flex-direction: row;    }
-	flex-wrap:   nowrap;
-	align-items: stretch;
+	@include portrait  { @include flex-direction(column); }
+	@include landscape { @include flex-direction(row   ); }
+	@include flex-wrap(nowrap);
+	@include align-items(stretch);
 
 	@include portrait  { min-height: 100%; }
 	@include landscape {     height: 100%; }
@@ -192,9 +222,9 @@ input[type=number] {
 	
 	@include portrait { align-self: stretch; }
 
-	display: flex;
-	@include portrait  { flex-direction: row;    }
-	@include landscape { flex-direction: column; }
+	@include display-flex;
+	@include portrait  { @include flex-direction(row   ); }
+	@include landscape { @include flex-direction(column); }
 
 	background-color: $ml-accent-bg;
 	           color: $ml-accent-fg;
@@ -210,11 +240,11 @@ input[type=number] {
 	}
 
 	+ * {
-		flex-grow: 1;
+		@include flex-grow(1);
 		
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
+		@include display-flex;
+		@include flex-direction(row);
+		@include justify-content(center);
 		
 		@include landscape {
 			height: 100%;
@@ -252,19 +282,19 @@ input[type=number] {
 }
 
 #ml-nav {
-	flex-grow: 1;
+	@include flex-grow(1);
 
-	display: flex;
+	@include display-flex;
 	@include portrait {
-		flex-wrap: wrap;
-		flex-direction: row;
-		justify-content: flex-end;
+		@include flex-wrap(wrap);
+		@include flex-direction(row);
+		@include justify-content(flex-end);
 	}
 	@include landscape {
-		flex-direction: column;
-		justify-content: flex-start;
+		@include flex-direction(column);
+		@include justify-content(flex-start);
 	}
-	align-items: stretch;
+	@include align-items(stretch);
 
 	.ml-item {
 		min-width: 8rem;
@@ -297,7 +327,7 @@ input[type=number] {
 }
 
 #ml-content {
-	flex-grow: 1;
+	@include flex-grow(1);
 
 	min-width: 40rem;
 	max-width: $ml-content-max-width;
@@ -311,10 +341,10 @@ input[type=number] {
 	margin-bottom: 2rem;
 
 	.ml-header {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		align-items: flex-end;
+		@include display-flex;
+		@include flex-direction(row);
+		@include flex-wrap(nowrap);
+		@include align-items(flex-end);
 
 		padding-left:   1.0rem;
 		padding-right:  1.0rem;
@@ -326,14 +356,14 @@ input[type=number] {
 		border-bottom-color: $ml-primary-fg;
 
 		.ml-title {
-			flex-grow: 1;
+			@include flex-grow(1);
 			text-align: left;
 			h1 { font-size: 2.2rem; }
 			h2 { font-size: 1.6rem; }
 		}
 
 		.ml-date {
-			flex-grow: 1;
+			@include flex-grow(1);
 			color: $ml-accent-dull-fg;
 			text-align: right;
 		}
@@ -405,10 +435,10 @@ input[type=number] {
 }
 
 .ml-split {
-	display: flex;
-	flex-direction: row;
+	@include display-flex;
+	@include flex-direction(row);
 
-	> * { flex-grow: 1; }
+	> * { @include flex-grow(1); }
 }
 
 .ml-left  { text-align: left;  }
