@@ -70,6 +70,11 @@ $ml-total-max-width: $ml-title-width + $ml-content-max-width + 2 * $ml-content-p
 	align-items: $value;
 }
 
+@mixin align-self($value) {
+	-webkit-align-self: $value;
+	align-self: $value;
+}
+
 @mixin flex-direction($value) {
 	-webkit-flex-direction: $value;
 	flex-direction: $value;
@@ -220,7 +225,7 @@ input[type=number] {
 #ml-header {
 	min-width:  $ml-title-width;
 	
-	@include portrait { align-self: stretch; }
+	@include portrait { @include align-self(stretch); }
 
 	@include display-flex;
 	@include portrait  { @include flex-direction(row   ); }
