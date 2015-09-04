@@ -134,6 +134,8 @@ $$L_\text{r} = \boldsymbol{f_\text{r}^*} \cdot \boldsymbol{L_\text{i}}\text{.}$$
 
 #Results
 
+This scene consists of two rows of spheres, one row of dielectrics and one row of metals, with roughness varying from 0.1 to 1.0, illuminated using a combination of direct lighting and our new spherical harmonics environmental lighting.
+
 <div id='sh-lighting2-demo'></div>
 <script>
 	require(['arcade/demo/sh-lighting2'], function (init) {
