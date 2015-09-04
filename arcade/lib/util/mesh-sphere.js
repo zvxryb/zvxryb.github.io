@@ -28,11 +28,13 @@ function (math, Mesh, subdivide) {
 	
 	function sphere(detail) {
 		if (detail <= 0) {
-			var mesh = new Mesh([['position', 3]]);
+			var mesh = new Mesh([['position', 3], ['normal', 3]]);
 			
 			vertices.forEach(function (vertex) {
+				var n = math.divide(vertex, math.norm(vertex));
 				mesh.addVertex({
-					position: math.divide(vertex, math.norm(vertex))
+					position: n,
+					normal:   n
 				});
 			});
 			
@@ -43,9 +45,12 @@ function (math, Mesh, subdivide) {
 			return mesh;
 		};
 		return subdivide(sphere(detail-1), function (a, b) {
-			var c = math.add(a.position, b.position);
-			c = math.divide(c, math.norm(c));
-			return { position: c };
+			var n = math.add(a.normal, b.normal);
+			n = math.divide(n, math.norm(n));
+			return {
+				position: n,
+				normal:   n
+			};
 		});
 	}
 	

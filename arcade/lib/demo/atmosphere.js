@@ -183,7 +183,7 @@ define([
 		function draw(time) {
 			var theta  = 1.4 * Math.PI * ((f * time/1000) % 1) - 0.7 * Math.PI;
 			var sunDir = [Math.sin(theta), 0, Math.cos(theta)];
-			sky.draw({
+			sky.setValues({
 				r_earth: values.r_earth,
 				h_sky: values.h_sky,
 				E_sun: [
@@ -202,6 +202,7 @@ define([
 				scale:  [1.0, 1.0],
 				offset: [0.0, 0.0]
 			});
+			sky.draw();
 			
 			gl.clearColor(0, 0, 0, 0);
 			gl.clear(gl.COLOR_BUFFER_BIT);

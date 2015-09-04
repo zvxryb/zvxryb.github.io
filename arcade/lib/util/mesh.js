@@ -17,12 +17,12 @@ define([], function () {
 	}
 	
 	Mesh.square = function () {
-		var mesh = new Mesh([['position', 2]]);
+		var mesh = new Mesh([['position', 3], ['normal', 3]]);
 		
-		mesh.addVertex({ position: [-1, -1] });
-		mesh.addVertex({ position: [ 1, -1] });
-		mesh.addVertex({ position: [ 1,  1] });
-		mesh.addVertex({ position: [-1,  1] });
+		mesh.addVertex({ position: [-1, -1, 0], normal: [0, 0, 1] });
+		mesh.addVertex({ position: [ 1, -1, 0], normal: [0, 0, 1] });
+		mesh.addVertex({ position: [ 1,  1, 0], normal: [0, 0, 1] });
+		mesh.addVertex({ position: [-1,  1, 0], normal: [0, 0, 1] });
 		
 		mesh.addTriangle(0, 1, 2);
 		mesh.addTriangle(2, 3, 0);

@@ -66,7 +66,8 @@ define ([
 		function draw(time) {
 			var theta = Math.PI * (1.05 * ((f * time / 1000) % 1) - 0.525);
 			var sunDir = [Math.sin(theta), 0, Math.cos(theta)];
-			sky.draw({ dir_sun: sunDir });
+			sky.setValues({ dir_sun: sunDir });
+			sky.draw();
 			var harmonics = math.flatten(env.project(sky));
 			
 			gl.clearColor(0, 0, 0, 0);

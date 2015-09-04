@@ -25,6 +25,25 @@
 		<script type='text/javascript'
 			src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'>
 		</script>
+		<script>
+			MathJax.Hub.Config({
+				TeX: {
+					Macros: {
+						boldVec:   ["\\boldsymbol{#1}", 1],
+						vecDef:    ["{\\left\\langle #1 \\right\\rangle}", 1],
+						unitVec:   ["\\boldVec{\\hat{#1}}", 1],
+						norm:      ["{\\left\\lVert #1 \\right\\rVert}", 1],
+						normalize: ["\\frac{#1}{\\norm{#1}}", 1],
+						inlineFraction:  ["\\left.\\raise{0.2em}{\\small #1}\\middle/\\lower{0.2em}{\\small #2}\\right.", 2],
+						inlineNormalize: ["\\inlineFraction{#1}{\\norm{#1}}", 1],
+						NdotL:     "{\\unitVec{n}\\cdot\\unitVec{l}}",
+						NdotV:     "{\\unitVec{n}\\cdot\\unitVec{v}}",
+						NdotH:     "{\\unitVec{n}\\cdot\\unitVec{h}}",
+						VdotH:     "{\\unitVec{v}\\cdot\\unitVec{h}}"
+					}
+				}
+			});
+		</script>
 	</head>
 	<body>
 		<div id='ml-header'>

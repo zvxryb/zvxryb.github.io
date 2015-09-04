@@ -30,10 +30,10 @@ define(['math'], function (math) {
 	Matrix.frustum = function (dx, dy, z0, z1) {
 		var dz = (z1 - z0);
 		var data = [
-			[2/dx,    0,      0,         0],
-			[   0, 2/dy,      0,         0],
-			[   0,    0, -z1/dz, -z1*z0/dz],
-			[   0,    0,     -1,         0]
+			[2/dx,    0,           0,          0],
+			[   0, 2/dy,           0,          0],
+			[   0,    0, -(z0+z1)/dz, 2*z1*z0/dz],
+			[   0,    0,          -1,          0]
 		];
 		return new Matrix(data);
 	};
@@ -41,10 +41,30 @@ define(['math'], function (math) {
 	Matrix.perspective = function (fov, ratio, z0, z1) {
 		var dydz = math.tan(fov/2);
 		var dxdz = ratio * dydz;
-		return Matrix.frustum(2*dxdz, 2*dydz, z0, z1);
+		return Matrix.frustum(2*dxdz, 2*dydz, -z0, -z1);
 	};
 	
-	Matrix.rot = function (v) {
+	Matrix.translation = function (x, y, z) {
+		var data = [
+			[1, 0, 0, x],
+			[0, 1, 0, y],
+			[0, 0, 1, z],
+			[0, 0, 0, 1]
+		]
+		return new Matrix(data);
+	};
+	
+	Matrix.scale = function (x, y, z) {
+		var data = [
+			[x, 0, 0, 0],
+			[0, y, 0, 0],
+			[0, 0, z, 0],
+			[0, 0, 0, 1]
+		]
+		return new Matrix(data);
+	};
+	
+	Matrix.rotation = function (v) {
 		var theta = math.norm(v);
 		if (theta < 0.000001) return Matrix.identity(3)
 		var u = math.divide(v, theta);
