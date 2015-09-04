@@ -178,7 +178,8 @@ define([
 			var result = [];
 			Array.prototype.push.apply(result, util.range(8).map(function (i) {
 				var metalness = i < 4 ? 0 : 1;
-				var roughness = 0.9 * ((i % 4) / 4) + 0.1;
+				var roughness = (1 - math.sqrt(0.1)) * ((i % 4) / 4) + math.sqrt(0.1);
+				roughness *= roughness;
 				var x = 1.2 * (i < 4 ? -1 : 1);
 				var y = 1.2 * 2 * (i % 4 - 1.5);
 				var model = Matrix.translation(x, y, 0);
