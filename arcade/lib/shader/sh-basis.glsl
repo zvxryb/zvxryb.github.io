@@ -4,7 +4,7 @@
 {% endcomment%}
 // real-valued spherical harmonics borrowed from Wikipedia
 
-const float sh_project_band0 = 1.0/2.0 * sqrt(1.0/pi);
+float sh_project_band0 = 1.0/2.0 * sqrt(1.0/pi);
 
 void sh_project_band1(vec3 n, out float Y1[3]) {
 	Y1[0] = sqrt(3.0/4.0/pi) * n.y;
