@@ -17,12 +17,17 @@ uniform vec3      dir_sun;
 uniform vec3      E_sun;
 uniform float     direct_scale;
 uniform float     sky_scale;
+uniform sampler2D shadowMap;
+uniform mat4      shadowView;
+uniform mat4      shadowProj;
 varying vec3 vCoord;
 varying vec3 vNormal;
 
 const float pi = 3.14159265;
 
 {% include_relative rgbe8-unsigned.glsl %}
+{% include_relative float-rgba8.glsl %}
+{% include_relative shadowmap.glsl %}
 {% include_relative diffuse-oren-nayar.glsl %}
 {% include_relative specular-ggx.glsl %}
 {% include_relative sh-basis.glsl type='vec3' %}
@@ -102,7 +107,9 @@ void main() {
 	vec3 specular = vec3(specular_cookTorrance_GGX(roughness, n, dir_sun, v));
 	vec3 direct = E_sun * max(dot(n, dir_sun), 0.0) * mix(diffuse, specular, F);
 	
-	vec3 c = sky * sky_scale + direct * direct_scale;
+	float shadow = sampleShadow(shadowMap, shadowView, shadowProj, vCoord + 0.05 * n);
+	
+	vec3 c = sky * sky_scale + shadow * direct * direct_scale;
 	
 	gl_FragColor = toRGBE(c);
 }

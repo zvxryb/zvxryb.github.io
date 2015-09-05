@@ -5,6 +5,7 @@ define([
 	'math',
 	'arcade/util/brdf-lookup',
 	'arcade/util/demo-init',
+	'arcade/util/depthmap',
 	'arcade/util/env-sh-project',
 	'arcade/util/env-sky',
 	'arcade/util/html-ui',
@@ -29,6 +30,7 @@ define([
 	math,
 	genBRDF,
 	init,
+	DepthMap,
 	Projector,
 	Sky,
 	ui,
@@ -165,6 +167,9 @@ define([
 			depth: hdrFrameDepth
 		});
 		
+		var shadowSize = 1024;
+		var shadowMap  = new DepthMap(state, shadowSize);
+		
 		var projection = Matrix.perspective(Math.PI/3, w/h, 0.1, 1000);
 		var invProj = projection.inv();
 		
@@ -180,7 +185,7 @@ define([
 				var metalness = i < 4 ? 0 : 1;
 				var roughness = (1 - math.sqrt(0.1)) * ((i % 4) / 4) + math.sqrt(0.1);
 				roughness *= roughness;
-				var x = 1.2 * (i < 4 ? -1 : 1);
+				var x = 1.8 * (i < 4 ? -1 : 1);
 				var y = 1.2 * 2 * (i % 4 - 1.5);
 				var model = Matrix.translation(x, y, 0);
 				
@@ -242,11 +247,18 @@ define([
 				});
 			});
 		}, function (brdfScale, lookup0, lookup1) {
+			var brdfIndex0  = 0;
+			var brdfIndex1  = 1;
+			var shadowIndex = 2;
 			prog_lighting.use(function (attributes, setUniforms) {
 				setUniforms({
 					texelSize: 1/brdfSize,
 					brdfScale: brdfScale,
-					brdf: [0, 1]
+					brdf: [
+						brdfIndex0,
+						brdfIndex1
+					],
+					shadowMap: shadowIndex
 				});
 			});
 			
@@ -276,12 +288,16 @@ define([
 					invView.data[2][3]
 				];
 				
-				hdrFramebuffer.use(function() {
-					gl.clearColor(0, 0, 0, 0);
-					gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-					state.withCapability(gl.CULL_FACE, true, function () {
-						state.withCapability(gl.DEPTH_TEST, true, function () {
-							gl.depthFunc(gl.LEQUAL);
+				var shadow = shadowMap.drawOrtho(sunDir, 15, 15, 1000, scene);
+				
+				state.withCapability(gl.CULL_FACE, true, function () {
+					state.withCapability(gl.DEPTH_TEST, true, function () {
+						
+						hdrFramebuffer.use(function() {
+							gl.clearColor(0, 0, 0, 0);
+							gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+							
+							gl.depthFunc(gl.LESS);
 							prog_lighting.use(function (attributes, setUniforms) {
 								setUniforms({
 									viewCoord: viewCoord,
@@ -289,23 +305,29 @@ define([
 									dir_sun: sky.values.dir_sun,
 									E_sun: sky.directIrradiance(),
 									direct_scale: inputs.direct,
-									sky_scale: inputs.sky
+									sky_scale: inputs.sky,
+									shadowView: shadow.view,
+									shadowProj: shadow.projection
 								});
-								lookup0.use(0, function () {
-									lookup1.use(1, function () {
-										scene.forEach(function (object) {
-											if (object.update)
-												object.update();
-											setUniforms(object.values);
-											setUniforms({
-												mvp: projection.mul(view.mul(
-													object.values.model))
+								lookup0.use(brdfIndex0, function () {
+									lookup1.use(brdfIndex1, function () {
+										shadowMap.use(shadowIndex, function () {
+											scene.forEach(function (object) {
+												if (object.update)
+													object.update();
+												setUniforms(object.values);
+												setUniforms({
+													mvp: projection.mul(view.mul(
+														object.values.model))
+												});
+												object.drawable.draw(attributes);
 											});
-											object.drawable.draw(attributes);
 										});
 									});
 								});
 							});
+							
+							gl.depthFunc(gl.LEQUAL);
 							prog_sky.use(function (attributes, setUniforms) {
 								setUniforms({
 									invProj: invProj,
