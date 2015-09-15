@@ -150,12 +150,6 @@ body {
 
 a { text-decoration: inherit; }
 
-p {
-	margin-top:    1.0rem;
-	margin-bottom: 1.0rem;
-	line-height:   200%;
-}
-
 @include headings {
 	font-family: $ml-title-font;
 	font-weight: 400;
@@ -223,7 +217,7 @@ input[type=number] {
 }
 
 #ml-header {
-	min-width:  $ml-title-width;
+	@include landscape { width: $ml-title-width; }
 	
 	@include portrait { @include align-self(stretch); }
 
@@ -238,10 +232,6 @@ input[type=number] {
 		@include headings {
 			border-bottom: 1px solid $ml-accent-dull-fg;
 		}
-	}
-
-	a {
-		color: inherit;
 	}
 
 	+ * {
@@ -259,8 +249,6 @@ input[type=number] {
 }
 
 #ml-title {
-	min-width:  $ml-title-width;
-
 	> h1 {
 		text-align:    center;
 		font-size:     2.40rem;
@@ -277,6 +265,8 @@ input[type=number] {
 		border-bottom: none;
 	}
 	
+	@include landscape { min-height: 8rem; }
+	
 	@include portrait {
 		> h1, > h2 { display: inline-block; }
 		> h1 {
@@ -284,13 +274,14 @@ input[type=number] {
 			padding-right: 1.2rem;
 		}
 	}
+
+	color: inherit;
 }
 
 #ml-nav {
-	@include flex-grow(1);
-
 	@include display-flex;
 	@include portrait {
+		@include flex-grow(1);
 		@include flex-wrap(wrap);
 		@include flex-direction(row);
 		@include justify-content(flex-end);
@@ -328,6 +319,29 @@ input[type=number] {
 	.ml-item:nth-child(even) {
 		background-color: $ml-accent-dark-bg;
 		           color: $ml-accent-dark-fg;
+	}
+
+	a { color: inherit; }
+}
+
+#ml-about {
+	@include landscape { @include flex-grow(1); }
+	@include portrait  { display: none; }
+	@include align-self(center);
+	
+	@include display-flex;
+	@include flex-direction(column);
+	@include justify-content(center);
+	
+	padding: 1rem;
+	
+	color: $ml-accent-dull-fg;
+	font-size: 9pt;
+	line-height: 120%;
+	
+	p {
+		margin-top:    1em;
+		margin-bottom: 0em;
 	}
 }
 
@@ -380,7 +394,12 @@ input[type=number] {
 
 		padding:  1rem;
 
-		p { padding-left: 3rem; }
+		> p {
+			padding-left:  3rem;
+			margin-top:    1rem;
+			margin-bottom: 1rem;
+			line-height:   200%;
+		}
 
 		.ml-code-block {
 			font-family: $ml-fixed-font;

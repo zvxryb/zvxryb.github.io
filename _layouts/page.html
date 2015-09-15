@@ -71,6 +71,10 @@
 					<span class='ml-text'>Github</span>
 				</h2></a>
 			</div>
+			<div id='ml-about'>
+				{% capture about %}{% include about.md %}{% endcapture %}
+				{{ about | markdownify }}
+			</div>
 		</div>
 		<div>
 			<div id='ml-content'>
