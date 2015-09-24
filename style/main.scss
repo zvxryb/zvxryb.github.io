@@ -27,10 +27,8 @@ $ml-accent-dark-fg:      $ml-accent-fg - #040404;
 $ml-code-bg:          $ml-primary-dark-bg - #040404;
 $ml-code-fg:          $ml-primary-fg - #202020;
 $ml-code-comment-fg:  $ml-code-fg    + #808080;
-$ml-code-operator-fg: #000000;
-$ml-code-keyword-fg:  #4020d0;
-$ml-code-storage-fg:  #2040d0;
-$ml-code-function-fg: #d08020;
+$ml-code-keyword-fg:  #2060d0;
+$ml-code-function-fg: #c06020;
 $ml-code-number-fg:   #20a020;
 $ml-code-meta-fg:     #d02020;
 
@@ -135,17 +133,11 @@ body {
 .ml-code-block {
 	           color: $ml-code-fg;
 	background-color: $ml-code-bg;
-	.comment                  { color: $ml-code-comment-fg;  }
-	.keyword                  { color: $ml-code-keyword-fg;  }
-	.keyword.operator         { color: $ml-code-operator-fg; }
-	.entity.name.function     { color: $ml-code-function-fg; }
-	.meta.preprocessor        { color: $ml-code-meta-fg;     }
-	.storage                  { color: $ml-code-storage-fg;  }
-	.storage.type             { color: $ml-code-storage-fg + #003000; }
-	.storage.modifier         { color: $ml-code-storage-fg + #300000; }
-	.constant.numeric         { color: $ml-code-number-fg;   }
-	.constant.numeric.integer { color: $ml-code-number-fg + #300000; }
-	.constant.numeric.float   { color: $ml-code-number-fg + #000030; }
+	.hljs-comment      { color: $ml-code-comment-fg;  }
+	.hljs-keyword      { color: $ml-code-keyword-fg;  }
+	.hljs-built_in     { color: $ml-code-function-fg; }
+	.hljs-preprocessor { color: $ml-code-meta-fg;     }
+	.hljs-number       { color: $ml-code-number-fg;   }
 }
 
 a { text-decoration: inherit; }

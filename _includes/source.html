@@ -34,17 +34,18 @@
 				}
 			}
 		};
-		Rainbow.color(src, '{{include.language}}', function(highlighted) {
-			code.innerHTML = highlighted;
-			var overflow = pre.scrollHeight / pre.clientHeight;
-			if (overflow > 1.5) {
-				toggleDiv.addEventListener('click', toggle(pre));
-			} else {
-				pre.className = 'ml-full';
-				fade.style.visibility = 'hidden';
-				toggleDiv.style.display = 'none';
-			}
-		});
+		
+		result = hljs.highlight('{{include.language}}', src);
+		
+		code.innerHTML = result.value;
+		var overflow = pre.scrollHeight / pre.clientHeight;
+		if (overflow > 1.5) {
+			toggleDiv.addEventListener('click', toggle(pre));
+		} else {
+			pre.className = 'ml-full';
+			fade.style.visibility = 'hidden';
+			toggleDiv.style.display = 'none';
+		}
 	});
 </script>
 

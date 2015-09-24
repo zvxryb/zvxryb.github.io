@@ -1,4 +1,5 @@
 ---
+cdnjs_libs: https://cdnjs.cloudflare.com/ajax/libs
 ---
 <!DOCTYPE html>
 <!-- copyright 2015 by mike lodato (zvxryb@gmail.com)
@@ -20,8 +21,8 @@
 				}
 			});
 		</script>
-		<script src='/lib/rainbow.min.js'></script>
-		<script src='/lib/language/glsl.js'></script>
+		<script src='{{ page.cdnjs_libs }}/highlight.js/8.8.0/highlight.min.js'></script>
+		<script src='{{ page.cdnjs_libs }}/highlight.js/8.8.0/languages/glsl.min.js'></script>
 		<script type='text/x-mathjax-config'>
 			MathJax.Hub.Config({
 				TeX: {
