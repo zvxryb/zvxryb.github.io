@@ -152,10 +152,13 @@ define([
 		canvas.addEventListener('mousedown', function (evt) {
 			mouse = [evt.clientX, evt.clientY];
 		});
-		canvas.addEventListener('mouseup', function (evt) {
+		document.addEventListener('mouseup', function (evt) {
+			if (!mouse)
+				return;
 			mouse = null;
+			evt.preventDefault();
 		});
-		canvas.addEventListener('mousemove', function (evt) {
+		document.addEventListener('mousemove', function (evt) {
 			if (!mouse)
 				return;
 			(function (x, y) {
@@ -165,9 +168,10 @@ define([
 					return;
 				var scale = 2 * Math.PI / 500;
 				var v = math.cross([0, 0, 1], math.multiply(scale, [dx, dy, 0]));
-				view = Matrix.rot(v).resize(4).mul(view);
+				view = Matrix.rotation(v).resize(4).mul(view);
 			}).apply(null, mouse);
 			mouse = [evt.clientX, evt.clientY];
+			evt.preventDefault();
 		});
 		
 		function draw(time) {
