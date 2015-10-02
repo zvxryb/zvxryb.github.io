@@ -347,6 +347,15 @@ input[type=number] {
 	padding-right: $ml-content-padding;
 }
 
+.ml-fade-down {
+	position: absolute;
+	height: 10rem;
+	left:    0;
+	right:   0;
+	bottom:  0;
+	pointer-events: none;
+}
+
 .ml-post, .ml-section {
 	margin-top: 2rem;
 	margin-bottom: 2rem;
@@ -384,6 +393,7 @@ input[type=number] {
 		background-color: $ml-primary-bg;
 		           color: $ml-primary-fg;
 
+		position: relative;
 		padding:  1rem;
 
 		> p {
@@ -391,6 +401,10 @@ input[type=number] {
 			margin-top:    1rem;
 			margin-bottom: 1rem;
 			line-height:   200%;
+		}
+
+		.ml-fade-down {
+			background: linear-gradient(to bottom, rgba($ml-primary-bg, 0.0), $ml-primary-bg);
 		}
 
 		.ml-code-block {
@@ -401,15 +415,10 @@ input[type=number] {
 			margin-left:   -1rem;
 			margin-right:  -1rem;
 			
-			div {
+			> div {
 				position: relative;
-				overflow:hidden;
+				overflow: hidden;
 				.ml-fade-down {
-					position: absolute;
-					height: 10rem;
-					left:    0;
-					right:   0;
-					bottom:  0;
 					background: linear-gradient(to bottom, rgba($ml-code-bg, 0.0), $ml-code-bg);
 				}
 			}
@@ -447,6 +456,8 @@ input[type=number] {
 		border-top-style: solid;
 		border-top-width: 1px;
 		border-top-color: $ml-primary-fg;
+
+		text-align: right;
 	}
 }
 
