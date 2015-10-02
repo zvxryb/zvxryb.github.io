@@ -6,7 +6,7 @@ define(['arcade/util/mesh'], function (Mesh) {
 		var newMesh = new Mesh(mesh.format);
 		newMesh.vertices = mesh.vertices.slice();
 		
-		var lookup  = {};
+		var lookup = new Map();
 		
 		function key(i, j) {
 			if (i < j)
@@ -16,16 +16,14 @@ define(['arcade/util/mesh'], function (Mesh) {
 		
 		function get(i, j) {
 			var k = key(i, j);
-			var idx;
-			if (lookup.hasOwnProperty(k))
-				idx = lookup[k];
+			var idx = lookup.get(k);
 			if (idx === undefined) {
 				var a = mesh.getVertex(i)
 				var b = mesh.getVertex(j);
 				var ab = lerp(a, b);
 				idx = newMesh.vertexCount();
 				newMesh.addVertex(ab);
-				lookup[k] = idx;
+				lookup.set(k, idx);
 			}
 			return idx;
 		}
