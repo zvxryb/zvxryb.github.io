@@ -394,6 +394,7 @@ input[type=number] {
 		           color: $ml-primary-fg;
 
 		position: relative;
+		overflow: hidden;
 		padding:  1rem;
 
 		> p {
@@ -456,8 +457,6 @@ input[type=number] {
 		border-top-style: solid;
 		border-top-width: 1px;
 		border-top-color: $ml-primary-fg;
-
-		text-align: right;
 	}
 }
 
