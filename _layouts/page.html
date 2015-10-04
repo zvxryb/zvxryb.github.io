@@ -13,16 +13,7 @@ cdnjs_libs: https://cdnjs.cloudflare.com/ajax/libs
 		<script src='{{ page.cdnjs_libs }}/es5-shim/4.1.14/es5-shim.min.js'></script>
 		<script src='{{ page.cdnjs_libs }}/es6-shim/0.33.6/es6-shim.min.js'></script>
 		<script src='/lib/require.js'></script>
-		<script>
-			requirejs.config({
-				baseUrl: '/',
-				paths: {
-					require: 'lib/require',
-					math:    'lib/math.min',
-					arcade:  'arcade/lib'
-				}
-			});
-		</script>
+		<script src='/lib/require-config.js'></script>
 		<script src='{{ page.cdnjs_libs }}/highlight.js/8.8.0/highlight.min.js'></script>
 		<script src='{{ page.cdnjs_libs }}/highlight.js/8.8.0/languages/glsl.min.js'></script>
 		<script type='text/x-mathjax-config'>
