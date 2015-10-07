@@ -37,8 +37,8 @@ define([], function () {
 	Mesh.prototype.getVertex = function (index) {
 		var vertex = {};
 		var data   = this.vertices.slice(this.stride * index, this.stride * (index + 1));
+		var offset = 0;
 		this.format.forEach(function (attribute) {
-			var offset = 0;
 			(function (key, size) {
 				vertex[key] = data.slice(offset, offset + size);
 				offset += size;
@@ -59,7 +59,9 @@ define([], function () {
 				Array.prototype.push.apply(data, attribData);
 			}).apply(null, attribute);
 		});
+		var index = this.vertexCount();
 		Array.prototype.push.apply(this.vertices, data);
+		return index;
 	}
 	
 	Mesh.prototype.triangleCount = function () {
