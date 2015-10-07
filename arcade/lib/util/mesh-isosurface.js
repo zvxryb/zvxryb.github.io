@@ -64,6 +64,25 @@ define([
 		
 		var vertices = new Map();
 		var mesh     = new Mesh([['position', 3], ['normal', 3]]);
+		
+		function quad(dir, v0, v1, v2, v3) {
+			var x01 = math.subtract(v1.x, v0.x);
+			var x02 = math.subtract(v2.x, v0.x);
+			var x20 = math.subtract(v0.x, v2.x);
+			var x21 = math.subtract(v1.x, v2.x);
+			
+			var n0 = normalize(math.cross(x01, x02));
+			var n1 = normalize(math.cross(x20, x21));
+			
+			if (math.dot(dir, n0) >= 0 && math.dot(dir, n1) >= 0) {
+				mesh.addTriangle(v[0].i, v[1].i, v[2].i);
+				mesh.addTriangle(v[2].i, v[3].i, v[0].i);
+			} else {
+				mesh.addTriangle(v[1].i, v[2].i, v[3].i);
+				mesh.addTriangle(v[3].i, v[0].i, v[1].i);
+			}
+		}
+		
 		for (var i = -1; i < n + 1; ++i)
 		for (var j = -1; j < n + 1; ++j)
 		for (var k = -1; k < n + 1; ++k)
@@ -104,6 +123,7 @@ define([
 		for (var j = -1; j < n; ++j)
 		for (var k = -1; k < n; ++k)
 		{
+			var dx = math.dotDivide(math.subtract(max, min), n);
 			var c  = coord(i + 0.5, j + 0.5, k + 0.5);
 			
 			var A = [];
@@ -134,7 +154,7 @@ define([
 				if (edge === undefined)
 					continue;
 				
-				var u = math.subtract(edge.x, c);
+				var u = math.dotDivide(math.subtract(edge.x, c), dx);
 				
 				A.push(edge.n);
 				b.push(math.dot(edge.n, u));
@@ -148,14 +168,13 @@ define([
 			var V   = fromJmat(svd.v);
 			var S_  = math.transpose(fromJmat(svd.s).map(function (row) {
 				return row.map(function (value) {
-					return math.abs(value) < 0.1
+					return math.abs(value) < 0.5
 						? 0
 						: 1 / value;
 				});
 			}));
 			var u = math.multiply(V, math.multiply(S_, math.multiply(U_T, b)));
-			var x = math.add(u, c);
-			
+			var x = math.add(math.dotMultiply(u, dx), c);
 			var normal = normalize(dfdx(x));
 			
 			var key   = i + ':' + j + ':' + k;
@@ -214,21 +233,7 @@ define([
 					};
 				});
 				
-				function error(a, b) {
-					return math.norm(math.subtract(a.x, b.x));
-				}
-				
-				var e0 = error(v[0], v[2]);
-				var e1 = error(v[1], v[3]);
-				
-				if (e0 <= e1)
-				{
-					mesh.addTriangle(v[0].i, v[1].i, v[2].i);
-					mesh.addTriangle(v[2].i, v[3].i, v[0].i);
-				} else {
-					mesh.addTriangle(v[1].i, v[2].i, v[3].i);
-					mesh.addTriangle(v[3].i, v[0].i, v[1].i);
-				}
+				quad(edge.n, v[0], v[1], v[2], v[3]);
 			}
 		}
 		
