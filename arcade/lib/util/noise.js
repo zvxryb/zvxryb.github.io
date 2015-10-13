@@ -1,13 +1,14 @@
 /* copyright 2015 by mike lodato (zvxryb@gmail.com)
  * this work is subject to the terms of the MIT license */
 
-define(['arcade/util/hash'], function (hash) {
-	function gradient(x, y, z, seed) {
-		var w = seed;
+define(['arcade/util/hash'], function (Hash) {
+	function gradient(i, j, k, seed) {
+		var h = new Hash(seed);
+		h.word(i).word(j).word(k);
 		for (;;) {
-			var x = w = hash([x, y, z], w ^ seed);
-			var y = w = hash([x, y, z], w ^ seed);
-			var z = w = hash([x, y, z], w ^ seed);
+			var x = h.word(0).digest();
+			var y = h.word(0).digest();
+			var z = h.word(0).digest();
 			
 			x /= 0x7FFFFFFF;
 			y /= 0x7FFFFFFF;
@@ -18,55 +19,88 @@ define(['arcade/util/hash'], function (hash) {
 		}
 	}
 	
-	function dotGradient(x0, y0, z0, x, y, z, seed) {
-		var dx = x - x0;
-		var dy = y - y0;
-		var dz = z - z0;
-		var g = gradient(x0, y0, z0, seed);
-		return g[0] * dx + g[1] * dy + g[2] * dz;
+	function gradientData(hash, min, max, i) {
+		if (i >= min.length || i >= max.length) {
+			var n = min.length;
+			var result = new Array(n);
+			for (var j = 0; j < n; ++j)
+				result[j] = hash.word(0).digest() / 0x7FFFFFFF;
+			return result;
+		}
+		
+		var j0 = min[i];
+		var j1 = max[i];
+		
+		var result = new Array(j1 - j0);
+		for (var j = j0; j < j1; ++j) {
+			var h = hash.clone().word(j);
+			result[j - j0] = gradientData(h, min, max, i+1);
+		}
+		return result;
+	}
+	
+	function NoiseVolume(seed, min, max) {
+		this.min = min;
+		this.max = max;
+		this.data = gradientData(new Hash(seed), min, max, 0);
+	}
+	
+	NoiseVolume.prototype.gradient = function (index) {
+		var n = index.length;
+		var data = this.data;
+		for (var i = 0; i < n; ++i)
+			data = data[index[i]-this.min[i]];
+		return data;
+	}
+	
+	NoiseVolume.prototype.dotGradient = function (x0, x) {
+		var g = this.gradient(x0);
+		var n = g.length;
+		
+		var result = 0;
+		for (var i = 0; i < n; ++i)
+			result += g[i] * (x[i] - x0[i]);
+		
+		return result;
 	}
 	
 	function interpolate(x0, x1, t) {
-		var u = t <= 0.5
-			?  2 * t * t
-			: -2 * t * t + 4 * t - 1;
+		var t2 = t  * t;
+		var t3 = t2 * t;
+		var t4 = t3 * t;
+		var t5 = t4 * t;
+		var u = 6 * t5 - 15 * t4 + 10 * t3;
 		return u * x1 + (1 - u) * x0;
 	}
 	
-	function noise3(x, y, z, seed) {
-		var x0 = Math.floor(x);
-		var y0 = Math.floor(y);
-		var z0 = Math.floor(z);
+	NoiseVolume.prototype.sample = function (x0, x1, x, i) {
+		var j = i.length;
+		if (j >= x.length)
+			return this.dotGradient(i, x);
 		
-		var x1 = x0 + 1;
-		var y1 = y0 + 1;
-		var z1 = z0 + 1;
+		var i0 = i.slice();
+		var i1 = i.slice();
+		i0.push(x0[j]);
+		i1.push(x1[j]);
+		var f0 = this.sample(x0, x1, x, i0);
+		var f1 = this.sample(x0, x1, x, i1);
 		
-		var u = (x - x0) / (x1 - x0);
-		var v = (y - y0) / (y1 - y0);
-		var w = (z - z0) / (z1 - z0);
+		var t = (x[j] - x0[j]) / (x1[j] - x0[j]);
 		
-		var f000 = dotGradient(x0, y0, z0, x, y, z, seed);
-		var f001 = dotGradient(x0, y0, z1, x, y, z, seed);
-		var f010 = dotGradient(x0, y1, z0, x, y, z, seed);
-		var f011 = dotGradient(x0, y1, z1, x, y, z, seed);
-		var f100 = dotGradient(x1, y0, z0, x, y, z, seed);
-		var f101 = dotGradient(x1, y0, z1, x, y, z, seed);
-		var f110 = dotGradient(x1, y1, z0, x, y, z, seed);
-		var f111 = dotGradient(x1, y1, z1, x, y, z, seed);
-		
-		var f00 = interpolate(f000, f001, w);
-		var f01 = interpolate(f010, f011, w);
-		var f10 = interpolate(f100, f101, w);
-		var f11 = interpolate(f110, f111, w);
-		
-		var f0 = interpolate(f00, f01, v);
-		var f1 = interpolate(f10, f11, v);
-		
-		return interpolate(f0, f1, u);
+		return interpolate(f0, f1, t);
 	}
 	
-	return {
-		noise3: noise3
-	};
+	NoiseVolume.prototype.value = function (x) {
+		var n = x.length;
+		var x0 = new Array(n);
+		var x1 = new Array(n);
+		for (var i = 0; i < n; ++i) {
+			x0[i] = Math.floor(x[i]);
+			x1[i] = x0[i] + 1;
+		}
+		
+		return this.sample(x0, x1, x, []);
+	}
+	
+	return NoiseVolume;
 });

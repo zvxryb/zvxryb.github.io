@@ -175,6 +175,7 @@ define([
 			}));
 			var u = math.multiply(V, math.multiply(S_, math.multiply(U_T, b)));
 			var x = math.add(math.dotMultiply(u, dx), c);
+			
 			var normal = normalize(dfdx(x));
 			
 			var key   = i + ':' + j + ':' + k;
@@ -237,6 +238,6 @@ define([
 			}
 		}
 		
-		return mesh;
+		return mesh.triangleCount() > 0 ? mesh : null;
 	};
 });

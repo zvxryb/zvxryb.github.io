@@ -2,7 +2,16 @@
  * this work is subject to the terms of the MIT license */
 
 define([], function () {
-	return function (data, seed) {
+	function Hash(seed) {
+		this.hash = seed;
+		this.bytes = 0;
+	}
+	
+	Hash.prototype.clone = function () {
+		return new Hash(this.hash);
+	}
+	
+	Hash.prototype.word = function (k) {
 		// an implementation of murmurhash3
 		var c1 = 0xcc9e2d51;
 		var c2 = 0x1b873593;
@@ -11,20 +20,26 @@ define([], function () {
 		var m  = 5;
 		var n  = 0xe6546b64;
 		
-		var h = seed;
-		for (var i = 0; i < data.length; ++i) {
-			var k = data[i];
-			
-			k *= c1;
-			k  = (k << r1) | (k >>> (32 - r1));
-			k *= c2;
-			
-			h ^= k;
-			h  = (h << r2) | (h >>> (32 - r2));
-			h *= m + n;
-		}
+		var h = this.hash;
 		
-		h ^= 4 * data.length;
+		k *= c1;
+		k  = (k << r1) | (k >>> (32 - r1));
+		k *= c2;
+		
+		h ^= k;
+		h  = (h << r2) | (h >>> (32 - r2));
+		h *= m + n;
+		
+		this.hash = h;
+		this.bytes += 4;
+		
+		return this;
+	}
+	
+	Hash.prototype.digest = function () {
+		var h = this.hash;
+		
+		h ^= this.bytes;
 		
 		h ^= (h >>> 16);
 		h *= 0x85ebca6b;
@@ -34,4 +49,6 @@ define([], function () {
 		
 		return h;
 	}
+	
+	return Hash;
 });
