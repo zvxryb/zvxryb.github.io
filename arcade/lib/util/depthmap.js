@@ -59,20 +59,17 @@ define([
 			[y[0], y[1], y[2]],
 			[z[0], z[1], z[2]]
 		]);
-		return view.resize(4);
+		return view;
 	}
 	
 	DepthMap.prototype.use = function (index, callback) {
 		this.texture.use(index, callback);
 	};
 	
-	DepthMap.prototype.drawOrtho = function (v, w, h, d, objects) {
+	DepthMap.prototype.draw = function (view, projection, objects) {
 		var state = this.state;
 		var prog  = this.program;
 		var gl = state.gl;
-		
-		var view = DepthMap.createViewMatrix(v);
-		var projection = Matrix.ortho(w, h, d);
 		
 		this.framebuffer.use(function () {
 			gl.clearColor(1, 1, 1, 1);
@@ -81,7 +78,7 @@ define([
 			prog.use(function (attributes, setUniforms) {
 				setUniforms({ projection: projection });
 				
-				state.withCapability(gl.CULL_FACE, true, function () {
+				state.withCapability(gl.CULL_FACE, false, function () {
 					state.withCapability(gl.DEPTH_TEST, true, function () {
 						gl.depthFunc(gl.LESS);
 						
@@ -95,6 +92,14 @@ define([
 				});
 			});
 		});
+	};
+	
+	DepthMap.prototype.drawOrtho = function (c, v, w, h, d, objects) {
+		var view = DepthMap.createViewMatrix(v).resize(4);
+		view = view.mul(Matrix.translation(-c[0], -c[1], -c[2]));
+		var projection = Matrix.ortho(w, h, d);
+		
+		this.draw(view, projection);
 		
 		return {
 			view:       view,

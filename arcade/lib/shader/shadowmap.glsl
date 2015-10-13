@@ -7,8 +7,8 @@ float sampleShadow(sampler2D shadow, mat4 view, mat4 proj, vec3 coord) {
 	vec4 clip = proj * eye;
 	vec3 ndc  = clip.xyz / clip.w;
 	
-	if (abs(ndc.x) > 1.0 || abs(ndc.y) > 1.0)
-		return 1.0;
+	if (abs(ndc.x) > 1.0 || abs(ndc.y) > 1.0 || abs(ndc.z) > 1.0)
+		return -1.0;
 	
 	vec2 uv = 0.5 * ndc.xy + 0.5;
 	

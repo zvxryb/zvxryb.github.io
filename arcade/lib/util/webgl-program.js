@@ -61,6 +61,24 @@ define([
 		function setUniform(info, value) {
 			if (value instanceof Matrix)
 				return value.use(state, info.location);
+			
+			if (value instanceof Array
+			 && value.length > 0
+			 && value[0] instanceof Matrix)
+			{
+				var n = value[0].size()[0];
+				var data = new Array(n*n*value.length);
+				value.forEach(function (matrix, i) {
+					var size = matrix.size();
+					if (size[0] != n || size[1] != n)
+						throw 'matrix size error';
+					var matrixData = matrix.flatten();
+					for (var j = 0; j < n*n; ++j)
+						data[n*n*i + j] = matrixData[j];
+				});
+				return Matrix.use(state, info.location, n, data);
+			}
+			
 			var f = function () {
 				switch (info.type) {
 					case gl.FLOAT:
@@ -74,9 +92,6 @@ define([
 					case gl.FLOAT_VEC2: return gl.uniform2fv;
 					case gl.FLOAT_VEC3: return gl.uniform3fv;
 					case gl.FLOAT_VEC4: return gl.uniform4fv;
-					case gl.FLOAT_MAT2: return gl.uniformMatrix2fv;
-					case gl.FLOAT_MAT3: return gl.uniformMatrix3fv;
-					case gl.FLOAT_MAT4: return gl.uniformMatrix4fv;
 					default: throw 'unsupported uniform type';
 				}
 				return null;

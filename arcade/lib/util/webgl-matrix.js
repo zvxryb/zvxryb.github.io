@@ -45,6 +45,11 @@ define(['math'], function (math) {
 	};
 	
 	Matrix.translation = function (x, y, z) {
+		if (x instanceof Array) {
+			z = x[2];
+			y = x[1];
+			x = x[0];
+		}
 		var data = [
 			[1, 0, 0, x],
 			[0, 1, 0, y],
@@ -87,6 +92,10 @@ define(['math'], function (math) {
 		return new Matrix(data);
 	};
 	
+	Matrix.prototype.size = function () {
+		return math.size(this.data);
+	}
+	
 	Matrix.prototype.resize = function (size) {
 		var data = [];
 		(function (w, h) {
@@ -105,34 +114,44 @@ define(['math'], function (math) {
 	}
 	
 	Matrix.prototype.mul = function (other) {
-		return new Matrix(math.multiply(this.data, other.data));
+		return other instanceof Matrix
+			? new Matrix(math.multiply(this.data, other.data))
+			: math.multiply(this.data, other);
 	}
 	
 	Matrix.prototype.inv = function () {
 		return new Matrix(math.inv(this.data));
 	}
 	
-	Matrix.prototype.use = function (state, location) {
+	Matrix.prototype.flatten = function () {
+		return math.flatten(math.transpose(this.data));
+	}
+	
+	Matrix.use = function (state, location, n, data) {
 		var gl = state.gl;
+		var uniformMatrix;
+		switch (n) {
+			case 2:
+				uniformMatrix = gl.uniformMatrix2fv;
+				break;
+			case 3:
+				uniformMatrix = gl.uniformMatrix3fv;
+				break;
+			case 4:
+				uniformMatrix = gl.uniformMatrix4fv;
+				break;
+			default:
+				throw 'invalid size';
+		};
+		uniformMatrix.call(gl, location, false, data);
+	}
+	
+	Matrix.prototype.use = function (state, location) {
 		(function (w, h) {
 			if (w !== h)
 				throw 'non-square matrix';
-			var uniformMatrix;
-			switch (w) {
-				case 2:
-					uniformMatrix = gl.uniformMatrix2fv;
-					break;
-				case 3:
-					uniformMatrix = gl.uniformMatrix3fv;
-					break;
-				case 4:
-					uniformMatrix = gl.uniformMatrix4fv;
-					break;
-				default:
-					throw 'invalid size';
-			};
-			uniformMatrix.call(gl, location, false, math.flatten(math.transpose(this.data)));
-		}).apply(this, math.size(this.data));
+			Matrix.use(state, location, w, this.flatten());
+		}).apply(this, this.size());
 	};
 	
 	return Matrix;
