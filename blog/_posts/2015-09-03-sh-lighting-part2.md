@@ -124,7 +124,7 @@ $$\unitVec{t_x} = \vecDef{t_{x,x}, t_{x,y}, t_{x,z}} = \normalize{\unitVec{t_y} 
 
 $$\boldsymbol{R_{TBN}} = \left[\begin{array}{ccc}
 	t_{x,x} & t_{y,x} & n_x \\
-	t_{x,y} & t_{y,y} & n_z \\
+	t_{x,y} & t_{y,y} & n_y \\
 	t_{x,z} & t_{y,z} & n_z
 \end{array}\right]\text{.}$$
 
