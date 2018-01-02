@@ -12,7 +12,15 @@ section: Resume
 			<div class='ml-employer'>
 				<div class='ml-split'>
 					<h2 class='ml-left'>{{job.title}}</h2>
-					<h2 class='ml-right'>{% include timeframe.html start=job.start end=job.end %}</h2>
+					<div class='ml-right'>
+						{% if job.timeframes %}
+							{% for timeframe in job.timeframes %}
+								<h4>{{timeframe.label}}: {% include timeframe.html start=timeframe.start end=timeframe.end %}</h4>
+							{% endfor %}
+						{% else %}
+							<h2>{% include timeframe.html start=job.start end=job.end %}</h2>
+						{% endif %}
+					</div>
 				</div>
 				<h3 class='ml-indent'>
 					{{employer.name}} 

@@ -1,8 +1,12 @@
 {% assign date = include.date %}
-{% if date.month %}
-	{{date.month}} 
-{% elsif date.semester %}
-	{{date.semester}} 
+{% if date.current %}
+	Current
+{% else %}
+	{% if date.month %}
+		{{date.month}} 
+	{% elsif date.semester %}
+		{{date.semester}}
+	{% endif %}
+	{{date.year}}
 {% endif %}
-{{date.year}}
 

@@ -1,5 +1,29 @@
 employment:
   - employer:
+      name: Verizon, envrmnt
+      industry: Virtual Reality
+      location:
+        city:  Warren
+        state: NJ
+    timeframes:
+      - label: as employee, Verizon
+        start:
+          year: 2017
+          month: October
+        end:
+          current: true
+      - label: as contractor, TekSystems
+        start:
+          year: 2016
+          month: March
+        end:
+          year: 2017
+          month: October
+    title: Software Engineer
+    duties:
+      - Application development with C++14, OpenGL Core 4.5, Cuda 8.0
+      - Front-end web development with HTML5, ES6, WebGL, WebVR, Angular
+  - employer:
       name: ALK Technologies
       industry: Navigation Software
       location:
@@ -34,9 +58,8 @@ education:
       discipline: Computer Engineering
       honors: with Honor
 interests:
-    - Graphics Programming and Physically-Based Rendering Techniques
+    - Graphics Programming for Photorealistic Rendering and General-Purpose Computing
     - Game Development
     - Embedded Development
-    - Digital Logic
-    - Digital and Analog Electronics
+    - Digital Logic and Analog Electronics
 
