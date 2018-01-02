@@ -1,4 +1,4 @@
-#About
+# About
 
 I am a software developer who is enthusiastic about many subjects, including algorithms, computer graphics, analog/digital electronics, science, and engineering.
 

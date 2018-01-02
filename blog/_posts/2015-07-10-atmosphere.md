@@ -7,7 +7,7 @@ This will (hopefully) be the first post in a series documenting my implementatio
 
 Also consider skipping to [the results]({{page.url}}#results) :D
 
-#Background
+# Background
 
 Perhaps the most important aspect of photorealistic rendering in games and other real-time applications is plausable environmental lighting.  Simple ambient lighting, which is constant in color and intensity for all directions, fails to capture subtle lighting cues present in the real world.  The first step, then, in producing photorealistic results is often the creation or acquisition of environment maps.  For dynamic outdoor scenes, this necessitates a parametric model of atmospheric scattering which can be adjusted based on time of day.
 
@@ -15,7 +15,7 @@ The appearence of Earth's sky is due to the scattering of light within the atmos
 
 <!--continue-->
 
-#Implementation
+# Implementation
 
 As stated in <a href='#ref-hoffman-preetham'>Rendering Outdoor Light Scattering in Real Time</a>, we can model light scattering by applying two processes at each step.  *Inscattering*, which determines how much light is accumulated by scattering, and *extinction*, which determines how much light is lost due to outscattering and absorption.
 
@@ -34,13 +34,13 @@ $$L_{i+1} = L_i\overbrace{e^{-(\beta_R + \beta_M)\Delta x}}^\text{extinction}+\o
 * $$\Phi_R(\theta)$$ is the Rayleigh phase function
 * $$\Phi_M(\theta)$$ is the Mie phase function
 
-##Simplifications
+## Simplifications
 
 To simplify the calculations, I assume uniform atmospheric density at all altitudes.  Non-uniform density can be implemented by supplying a particle scattering cross-section $$\sigma$$ to the shader and computing the scattering coefficient at each step by $$\beta(x) = \sigma\rho(x)$$, where $$\rho$$ is the number of particles per unit volume.  The advantage of using constant density is that we can approximate outscatter as $$e^{-\beta x}$$ rather than $$\exp\left[-\sigma\int\rho(x)dx\right]$$, which greatly reduces the computational cost of the shader.
 
 This model does not include absorption.  An absorption coefficient, $$\beta_{Ab.}$$, could be added to each extinction term so that $$F_{Ex.}=e^{-\beta_{Ex.}x}=e^{-(\beta_R + \beta_M + \beta_{Ab.})x}$$
 
-##Paraboloid Environment Mapping
+## Paraboloid Environment Mapping
 
 Paraboloid environment mapping projects a hemisphere of the environment by modeling the reflection of view rays by a parabolic surface.  This surface is defined by $$z = \frac{1}{2} - \frac{1}{2}\left(x^2 + y^2\right)$$ for $$x$$ and $$y$$ within the unit circle.
 
@@ -50,7 +50,7 @@ $$\vec{v}_{surface} = \left\langle x, y, \frac{1}{2} - \frac{1}{2}\left(x^2 + y^
 
 $$\vec{v}_{view} = \frac{\vec{v}_{coord}}{\left\lVert\vec{v}_{coord}\right\rVert}$$
 
-##High-Dynamic Range
+## High-Dynamic Range
 
 The resulting image covers a wide range of values which cannot be represented in an 8-bit value.  WebGL has a very limited selection of texture formats and none of them are suitable for HDR use without extra encoding.  The easiest method for storing HDR values in an 8-bit/channel buffer is to use an RGBE (RGB with a shared exponent) encoding.  The exponent is calculated from the largest absolute value of the three color channels.  Zero must be handled as a special case because $$log2(0)$$ is undefined.
 
@@ -79,7 +79,7 @@ $$\vec{c}_{RGB} = 2^{255e - 128}\left\langle r, g, b \right\rangle$$
 
 The demo uses the Reinhard tonemapping operator and sRGB curve for display.
 
-##Code
+## Code
 
 The following fragment shader is used to draw a full screen quad to an RGBA (RGBE encoded) framebuffer.  The result is a paraboloid environment map for a hemisphere centered directly upwards.
 
@@ -87,7 +87,7 @@ The following fragment shader is used to draw a full screen quad to an RGBA (RGB
 
 *Edit: 2015/07/30 Fixed an issue where samples with occluded in-scatter did not apply extinction*
 
-#Results
+# Results
 
 <div id='atmosphere-demo'></div>
 <script>
@@ -96,7 +96,7 @@ The following fragment shader is used to draw a full screen quad to an RGBA (RGB
 	});
 </script>
 
-#Further Reading
+# Further Reading
 
 * <span id='ref-hoffman-preetham'>*Rendering Outdoor Light Scattering in Real Time* by N. Hoffman and A. J. Preetham</span>
 * <span id='ref-oneil'>*<a href='https://developer.nvidia.com/gpugems/GPUGems2/gpugems2_chapter16.html'>GPU Gems 2, Chapter 16: Accurate Atmospheric Scattering

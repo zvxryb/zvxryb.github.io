@@ -5,7 +5,7 @@ title: "Spherical Harmonics Lighting: Part II"
 subtitle: Generating BRDF Lookup Tables & SH Lighting
 ---
 
-#Bidirectional Reflectance Distribution Functions
+# Bidirectional Reflectance Distribution Functions
 
 A bidirectional reflectance distrubtion function is a function which relates incident irradiance to outgoing radiance.  The BRDF generally varies with view direction, light direction, wavelength, and material properties.
 
@@ -15,7 +15,7 @@ Rather than directly storing the BRDF $$f_\text{r}$$, we store the BRDF product 
 
 <!--continue-->
 
-##Storage
+## Storage
 
 This distribution is isotropic, so we store values for view angles only in the xz-plane and transform our values as necessary.  This makes our lookup table effectively four-dimensional; a function of view angle ($$\theta$$), roughness ($$\alpha$$), metalness, and albedo ($$\rho$$, dielectrics) or reflectance at normal incidence ($$R_0$$, metals).
 
@@ -36,7 +36,7 @@ So we store four 2D lookups as functions of view angle and roughness:
 
 Three bands of SH coefficients are stored.  Our BRDF product function is symmetrical along the y-axis because it is isotropic and viewed only from the xz-plane.  This allows us to drop the coefficients for $$Y_{1,-1}$$, $$Y_{2,-2}$$, and $$Y_{2,-1}$$, which introduce asymmetry to the y-axis.  The remaining coefficients can be stored in one two-channel texture and one four-channel texture (<code>gl.LUMINANCE_ALPHA</code> and <code>gl.RGBA</code>, respectively).
 
-##Combined BRDF Product Function
+## Combined BRDF Product Function
 
 **Symbols:**
 
@@ -112,7 +112,7 @@ $$f_\text{r}^*\!\left(\unitVec{l}, \unitVec{v}\right) = \max\!\left(0,\; \NdotL\
 
 This function is projected into spherical harmonics using the same method we used to project environmental lighting (see [Part I](/blog/2015/08/20/sh-lighting-part1/)).
 
-#Lighting with Spherical Harmonics
+# Lighting with Spherical Harmonics
 
 In order for us to apply our BRDF to our environmental lighting, both must be represented in the same space.  Our environmental lighting is already represented in world space, but the result of our BRDF lookup is in a per-fragment local tangent space.  The method I use to rotate the BRDF into world space is given in [Simple and Fast Spherichal Harmonic Rotation](#ref-hable).  The rotation is given by a tangent-space matrix.
 
@@ -132,7 +132,7 @@ After rotation, our lighting is computed simply as the dot product of our SH BRD
 
 $$L_\text{r} = \boldsymbol{f_\text{r}^*} \cdot \boldsymbol{L_\text{i}}\text{.}$$
 
-#Results
+# Results
 
 This scene consists of two rows of spheres, one row of dielectrics and one row of metals, with roughness varying from 0.1 to 1.0, illuminated using a combination of direct lighting and our new spherical harmonics environmental lighting.
 
@@ -143,7 +143,7 @@ This scene consists of two rows of spheres, one row of dielectrics and one row o
 	});
 </script>
 
-#References and Further Reading
+# References and Further Reading
 * <span id='ref-kautz-sloan-snyder'>*Fast, Arbitrary BRDF Shading for Low-Frequency Lighting Using Spherical Harmonics* by J. Kautz, P.-P. Sloan, & J. Snyder</span>
 * <span id='ref-oren-nayar'>*Generalization of Lambert's Reflectance Model* by M. Oren and S. Nayar</span>
 * <span id='ref-cook-torrance'>*A Reflectance Model for Computer Graphics* by R. Cook and K. Torrance</span>
