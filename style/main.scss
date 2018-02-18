@@ -8,25 +8,25 @@
    all rights reserved */
 
 $ml-primary-bg:          #e8e8e8;
-$ml-primary-light-bg:    $ml-primary-bg + #040404;
-$ml-primary-dark-bg:     $ml-primary-bg - #040404;
+$ml-primary-light-bg:    lighten($ml-primary-bg, 1.5%);
+$ml-primary-dark-bg:     darken($ml-primary-bg, 1.5%);
 $ml-primary-fg:          #202020;
 $ml-primary-dull-fg:     #a0a0a0;
-$ml-primary-link-fg:     $ml-primary-fg + #408000;
-$ml-primary-hover-fg:    $ml-primary-fg + #60a000;
-$ml-primary-visited-fg:  $ml-primary-fg + #004060;
+$ml-primary-link-fg:     #60a020;
+$ml-primary-hover-fg:    #80c020;
+$ml-primary-visited-fg:  #206080;
 
 $ml-accent-bg:           #202020;
 $ml-accent-fg:           #e8e8e8;
 $ml-accent-dull-fg:      #606060;
-$ml-accent-light-bg:     $ml-accent-bg + #040404;
-$ml-accent-light-fg:     $ml-accent-fg + #040404;
-$ml-accent-dark-bg:      $ml-accent-bg - #040404;
-$ml-accent-dark-fg:      $ml-accent-fg - #040404;
+$ml-accent-light-bg:     lighten($ml-accent-bg, 1.5%);
+$ml-accent-light-fg:     lighten($ml-accent-fg, 1.5%);
+$ml-accent-dark-bg:      darken($ml-accent-bg, 1.5%);
+$ml-accent-dark-fg:      darken($ml-accent-fg, 1.5%);
 
-$ml-code-bg:          $ml-primary-dark-bg - #040404;
-$ml-code-fg:          $ml-primary-fg - #202020;
-$ml-code-comment-fg:  $ml-code-fg    + #808080;
+$ml-code-bg:          darken($ml-primary-dark-bg, 1.5%);
+$ml-code-fg:          darken($ml-primary-fg, 0.8%);
+$ml-code-comment-fg:  lighten($ml-code-fg, 50%);
 $ml-code-keyword-fg:  #2060d0;
 $ml-code-function-fg: #c06020;
 $ml-code-number-fg:   #20a020;
@@ -190,18 +190,41 @@ li > {
 	}
 }
 
+table {
+	border-spacing: 0;
+
+	th {
+		border-bottom-style: solid;
+		border-bottom-width: 1px;
+		border-bottom-color: $ml-primary-fg;
+	}
+	
+	tbody {
+		tr:nth-child(even) { background-color: $ml-primary-dark-bg;  }
+		tr:nth-child(odd)  { background-color: $ml-primary-light-bg; }
+		td {
+			border-left-style: solid;
+			border-left-width: 1px;
+			border-left-color: $ml-primary-bg;
+			border-right-style: solid;
+			border-right-width: 1px;
+			border-right-color: $ml-primary-bg;
+		}
+	}
+}
+
 input {
 	font-family: $ml-fixed-font;
-	background-color: $ml-primary-bg - #101010;
+	background-color: darken($ml-primary-bg, 6%);
 	           color: $ml-primary-fg;
 	border-style: solid;
 	border-width: 1px;
-	border-color: $ml-primary-bg - #181818;
+	border-color: darken($ml-primary-bg, 9%);
 	padding: 0.2rem;
 }
 
 input:disabled {
-	color: ($ml-primary-fg - #101010 + $ml-primary-bg) / 2;
+	color: mix($ml-primary-fg, darken($ml-primary-bg, 6%), 50%);
 }
 
 input[type=number] {
@@ -397,11 +420,19 @@ input[type=number] {
 		overflow: hidden;
 		padding:  1rem;
 
-		> p {
+		> p, > table {
 			padding-left:  3rem;
 			margin-top:    1rem;
 			margin-bottom: 1rem;
 			line-height:   200%;
+		}
+
+		th, td {
+			padding: 0 0.5rem;
+		}
+
+		tr > :first-child {
+			padding-left: 0;
 		}
 
 		.ml-fade-down {
