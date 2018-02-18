@@ -24,9 +24,9 @@ plot_functor_invoke:
 ---
 One of the most powerfully expressive features of modern C++ is the lambda, often used with its std::function wrapper.  These functional tools are readily employed in writing generic, reusable code.  As asynchronous computing becomes more and more important to make the most of our multi-threaded CPU and GPU resources, these functors also find use in asynchronous event handlers and task distribution/scheduling systems.
 
-What is the cost of all these function objects?  The ability to capture arbitrary data implies that, at some point, we must incur a heap allocation.  I would expect, however, that the majority of captures should be relatively small, in which case the obvious optimization is to provide a small, fixed-size storage area within the functor itself to enable stack allocation within these limits.  Some quick searching appears to support this (see Futher Reading below), but at what point does this degrade to heap allocation in practice, and *just how bad is it?*
+What is the cost of all these function objects?  The ability to capture arbitrary data in the fixed-size std::function implies that, at some point, we must incur a heap allocation.  I would expect, however, that the majority of captures should be relatively small, in which case the obvious optimization is to provide a small, fixed-size storage area within the functor itself to enable stack allocation within these limits.  Some quick searching appears to support this (see Futher Reading below), but at what point does this degrade to heap allocation in practice, and *just how bad is it?*
 
-In this post I'll analyze the performance characteristics of functors of varying capture sizes to determine under what conditions we begin to observe performance degredation.
+In this post I'll analyze the performance characteristics of functors of varying capture sizes to determine under what conditions we begin to observe performance degredation.  It is worth noting that the performance we're measuring is that of std::function, rather than C++ lambdas theselves.  C++ lambdas' types are unspecified, meaning they may not have the same limitations and performance characteristics as std::functions on their own, but they're also generally less useful for defining interfaces.
 
 <!--continue-->
 
@@ -62,7 +62,7 @@ Control durations for this test were 0.8ns (gcc), 0.6ns (clang), and 0.3ns (msvc
 
 ## Invocation
 
-{% include graph.html id='plot-functor-invoke' title='Functor Invokation Time (ns)' type='bar' data=page.plot_functor_invoke %}
+{% include graph.html id='plot-functor-invoke' title='Functor Invocation Time (ns)' type='bar' data=page.plot_functor_invoke %}
 
 This result is particularly interesting; I expected performance degration during the allocation test, but expected invocation to suffer no penalty from large captures.  While this is what we see from GCC/Clang, MSVC jumps from ~3-4ns, for small captures, to ~9-10ns for captures >48 bytes.  I'm not sure what is happening here, but I think it's beyond the scope of this post.
 
