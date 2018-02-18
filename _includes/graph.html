@@ -1,0 +1,11 @@
+<div id='{{ include.id }}'></div>
+<script>
+    {
+        let chart = new Chart({
+            parent: '#{{ include.id }}',
+            title: '{{ include.title }}',
+            type: '{{ include.type }}',
+            data: {{ include.data | jsonify }}
+        })
+    }
+</script>
