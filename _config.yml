@@ -1,4 +1,6 @@
 exclude: [Gemfile, Gemfile.lock]
 permalink: pretty
 excerpt_separator: <!--continue-->
-
+markdown: redcarpet2
+redcarpet:
+  extensions: ["no_intra_emphasis"]
