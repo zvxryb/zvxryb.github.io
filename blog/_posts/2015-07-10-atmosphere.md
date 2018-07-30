@@ -64,12 +64,12 @@ Encode (unsigned):
 
 <div class='math displayMode'>y = \left\lceil\log_2{x}\right\rceil</div>
 
-$$
+<div class='math displayMode'>
 \vec{c}_{RGBE} = \begin{cases}
 	\left\langle 2^{-y}\vec{c}_{RGB}, (y+128)/255\right\rangle & x > 0 \\
 	\left\langle 0, 0, 0, 0 \right\rangle & x <= 0
 \end{cases}
-$$
+</div>
 
 Decode (unsigned):
 

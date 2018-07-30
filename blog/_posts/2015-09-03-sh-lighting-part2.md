@@ -23,34 +23,34 @@ To make this work in WebGL, we need to pack this into a 2D texture.  Luckly, two
 
 <div class='math displayMode'>R(\theta_i)=R_0+(1-R_0)(1-\cos\theta_i)^5\text{,}</div>
 
-which, itself, is just a linear interoplation based on the value of <span class='math displayMode'>R_0</span>:
+which, itself, is just a linear interoplation based on the value of <span class='math'>R_0</span>:
 
 <div class='math displayMode'>R(\theta_i)=\text{lerp}\left([1-\cos\theta_i]^5,\; 1,\; R_0\right)\text{.}</div>
 
 So we store four 2D lookups as functions of view angle and roughness:
 
-1. Dielectric, <span class='math displayMode'>\rho = 0</span>
-2. Dielectric, <span class='math displayMode'>\rho = 1</span>
-3. Metal, <span class='math displayMode'>R_0 = 0</span>
-4. Metal, <span class='math displayMode'>R_0 = 1</span>
+1. Dielectric, <span class='math'>\rho = 0</span>
+2. Dielectric, <span class='math'>\rho = 1</span>
+3. Metal, <span class='math'>R_0 = 0</span>
+4. Metal, <span class='math'>R_0 = 1</span>
 
-Three bands of SH coefficients are stored.  Our BRDF product function is symmetrical along the y-axis because it is isotropic and viewed only from the xz-plane.  This allows us to drop the coefficients for <span class='math displayMode'>Y_{1,-1}</span>, <span class='math displayMode'>Y_{2,-2}</span>, and <span class='math displayMode'>Y_{2,-1}</span>, which introduce asymmetry to the y-axis.  The remaining coefficients can be stored in one two-channel texture and one four-channel texture (<code>gl.LUMINANCE_ALPHA</code> and <code>gl.RGBA</code>, respectively).
+Three bands of SH coefficients are stored.  Our BRDF product function is symmetrical along the y-axis because it is isotropic and viewed only from the xz-plane.  This allows us to drop the coefficients for <span class='math'>Y_{1,-1}</span>, <span class='math'>Y_{2,-2}</span>, and <span class='math'>Y_{2,-1}</span>, which introduce asymmetry to the y-axis.  The remaining coefficients can be stored in one two-channel texture and one four-channel texture (<code>gl.LUMINANCE_ALPHA</code> and <code>gl.RGBA</code>, respectively).
 
 ## Combined BRDF Product Function
 
 **Symbols:**
 
-* Incident light zenith angle, <span class='math displayMode'>\theta_i</span>
-* Incident light azimuth angle, <span class='math displayMode'>\phi_i</span>
-* Reflected light zenith angle, <span class='math displayMode'>\theta_r</span>
-* Reflected light azimuth angle, <span class='math displayMode'>\phi_r</span>
-* Surface albedo, <span class='math displayMode'>\phi</span>
-* Roughness, GGX (RMS slope), <span class='math displayMode'>\alpha</span>
-* Roughness, Oren-Nayar (standard deviation of angle), <span class='math displayMode'>\sigma</span>
-* Surface normal, <span class='math displayMode'>\unitVec{n}</span>
-* Light vector, <span class='math displayMode'>\unitVec{l} = \vecDef{\sin\theta_i\cos\phi_i,\; \sin\theta_i\sin\phi_i,\; \cos\theta_i}</span>
-* View vector, <span class='math displayMode'>\unitVec{v} = \vecDef{\sin\theta_r\cos\phi_r,\; \sin\theta_r\sin\phi_r,\; \cos\theta_r}</span>
-* Half-angle vector, <span class='math displayMode'>\unitVec{h} = \inlineNormalize{\unitVec{l} + \unitVec{v}}</span>
+* Incident light zenith angle, <span class='math'>\theta_i</span>
+* Incident light azimuth angle, <span class='math'>\phi_i</span>
+* Reflected light zenith angle, <span class='math'>\theta_r</span>
+* Reflected light azimuth angle, <span class='math'>\phi_r</span>
+* Surface albedo, <span class='math'>\phi</span>
+* Roughness, GGX (RMS slope), <span class='math'>\alpha</span>
+* Roughness, Oren-Nayar (standard deviation of angle), <span class='math'>\sigma</span>
+* Surface normal, <span class='math'>\unitVec{n}</span>
+* Light vector, <span class='math'>\unitVec{l} = \vecDef{\sin\theta_i\cos\phi_i,\; \sin\theta_i\sin\phi_i,\; \cos\theta_i}</span>
+* View vector, <span class='math'>\unitVec{v} = \vecDef{\sin\theta_r\cos\phi_r,\; \sin\theta_r\sin\phi_r,\; \cos\theta_r}</span>
+* Half-angle vector, <span class='math'>\unitVec{h} = \inlineNormalize{\unitVec{l} + \unitVec{v}}</span>
 
 Our diffuse term is given by the [Oren-Nayar model](#ref-oren-nayar) (rewritten as a BRDF),
 
@@ -68,21 +68,23 @@ In vector notation,
 
 <div class='math displayMode'>\tan\beta = \frac{\sqrt{1-\max(\NdotL, \NdotV)^2}}{\max(\NdotL, \NdotV)}\text{.}</div>
 
-The specular reflectance term is given by [Cook-Torrance](#ref-cook-torrance), with some slight variations.  The <span class='math displayMode'>\inlineFraction{1}{\pi}</span> coefficient is moved to the distribution term, <span class='math displayMode'>D</span>, and we scale the whole formula by <span class='math displayMode'>\inlineFraction{1}{4}</span> to match the formulation given in the GGX paper.  We also drop the Fresnel term, which will included in the combined result,
+The specular reflectance term is given by [Cook-Torrance](#ref-cook-torrance), with some slight variations.  The <span class='math'>\inlineFraction{1}{\pi}</span> coefficient is moved to the distribution term, <span class='math'>D</span>, and we scale the whole formula by <span class='math'>\inlineFraction{1}{4}</span> to match the formulation given in the GGX paper.  We also drop the Fresnel term, which will included in the combined result,
 
 <div class='math displayMode'>f_\text{r, specular}=\frac{DG}{4(\NdotL)(\NdotV)}\text{,}</div>
 
 with the [GGX facet distribution](#ref-walter-et-al),
 
-$$D=\frac{\alpha^2{\large \chi}^+\!\left(\unitVec{m}\cdot\unitVec{n}\right)}
+<div class='math displayMode'>
+D=\frac{\alpha^2{\large \chi}^+\!\left(\unitVec{m}\cdot\unitVec{n}\right)}
 {\pi\cos^4\theta_m\left(\alpha^2+\tan^2\theta_m\right)^2}\text{,}\quad
 {\large \chi}^+\!\left(a\right) = \begin{cases}
 1 & \text{if $a > 0$}\\
 0 & \text{if $a \le 0$}
 \end{cases}
-\text{.}$$
+\text{.}
+</div>
 
-This equation introduces a new variable, the "microfacet" normal, <span class='math displayMode'>\unitVec{m}</span>, which differs from the macroscopic "surface" normal that we have defined earlier.  The microfacet normal is the normal of the microscopic facet which is reflecting light towards the viewer.  We already know this vector, since we've defined it earlier with a different name; *the half-angle vector*, <span class='math displayMode'>\unitVec{h}</span>, a unit vector halfway between the light vector and the view vector.  The angle <span class='math displayMode'>\theta_m</span> is just the angle between the microfacet/half-angle vector and the macroscopic surface normal.  Making the necessary subtitutions,
+This equation introduces a new variable, the "microfacet" normal, <span class='math'>\unitVec{m}</span>, which differs from the macroscopic "surface" normal that we have defined earlier.  The microfacet normal is the normal of the microscopic facet which is reflecting light towards the viewer.  We already know this vector, since we've defined it earlier with a different name; *the half-angle vector*, <span class='math'>\unitVec{h}</span>, a unit vector halfway between the light vector and the view vector.  The angle <span class='math'>\theta_m</span> is just the angle between the microfacet/half-angle vector and the macroscopic surface normal.  Making the necessary subtitutions,
 
 <div class='math displayMode'>\cos\theta_m = \NdotH\text{,}</div>
 
@@ -122,11 +124,13 @@ Many graphics programmers will be familiar with tangent-space (or TBN) matrices 
 
 <div class='math displayMode'>\unitVec{t_x} = \vecDef{t_{x,x}, t_{x,y}, t_{x,z}} = \normalize{\unitVec{t_y} \times \unitVec{n}}\text{,}</div>
 
-$$\boldsymbol{R_{TBN}} = \left[\begin{array}{ccc}
+<div class='math displayMode'>
+\boldsymbol{R_{TBN}} = \left[\begin{array}{ccc}
 	t_{x,x} & t_{y,x} & n_x \\
 	t_{x,y} & t_{y,y} & n_y \\
 	t_{x,z} & t_{y,z} & n_z
-\end{array}\right]\text{.}$$
+\end{array}\right]\text{.}
+</div>
 
 After rotation, our lighting is computed simply as the dot product of our SH BRDF product function with our SH environmental radiance,
 
