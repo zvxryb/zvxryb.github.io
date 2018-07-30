@@ -18,30 +18,30 @@ The trade-off is a reduction in precision for low-order SH representations and r
 
 SH coefficients are obtained by (from Wikipedia)
 
-$$f_l^m = \int_\Omega f\left(\theta,\phi\right)Y_l^{m*}\left(\theta,\phi\right)d\Omega\text{.}$$
+<div class='math displayMode'>f_l^m = \int_\Omega f\left(\theta,\phi\right)Y_l^{m*}\left(\theta,\phi\right)d\Omega\text{.}</div>
 
-Because we are only concerned with real values, we can replace the complex conjugate of the spherical harmonics basis $$Y_l^{m*}\left(\theta,\phi\right)$$ with the real spherical harmonics $$Y_{l,m}\left(\theta,\phi\right)$$ to obtain a SH expansion of radiance, $$L$$,
+Because we are only concerned with real values, we can replace the complex conjugate of the spherical harmonics basis <span class='math'>Y_l^{m*}\left(\theta,\phi\right)</span> with the real spherical harmonics <span class='math'>Y_{l,m}\left(\theta,\phi\right)</span> to obtain a SH expansion of radiance, <span class='math'>L</span>,
 
-$$L_{l,m} = \int_\Omega L\left(\theta,\phi\right)Y_{l,m}\left(\theta,\phi\right)d\Omega\text{,}$$
+<div class='math displayMode'>L_{l,m} = \int_\Omega L\left(\theta,\phi\right)Y_{l,m}\left(\theta,\phi\right)d\Omega\text{,}</div>
 
-which can be converted to a discrete form and rewritten in terms of a normalized view vector, $$\boldsymbol{\hat{\omega}}$$,
+which can be converted to a discrete form and rewritten in terms of a normalized view vector, <span class='math'>\boldsymbol{\hat{\omega}}</span>,
 
-$$L_{l,m} = \sum_\Omega L\left(\boldsymbol{\hat{\omega}}\right)Y_{l,m}\left(\boldsymbol{\hat{\omega}}\right)d\Omega\text{.}$$
+<div class='math displayMode'>L_{l,m} = \sum_\Omega L\left(\boldsymbol{\hat{\omega}}\right)Y_{l,m}\left(\boldsymbol{\hat{\omega}}\right)d\Omega\text{.}</div>
 
-The differential solid angle, $$d\Omega$$, is generally defined in spherical coordinates as $$d\theta d\phi \sin\theta$$.  However, since we're not working in spherical coordinates, we need to find a solution for cartesian coordinates.
+The differential solid angle, <span class='math'>d\Omega</span>, is generally defined in spherical coordinates as <span class='math'>d\theta d\phi \sin\theta</span>.  However, since we're not working in spherical coordinates, we need to find a solution for cartesian coordinates.
 
-$$d\Omega$$ represents the surface area of a unit sphere subtended by a single pixel.  We can obtain an approximation of the arc subtended by a pixel in the x- and y- directions by finding the change in the normalized view vector, $$\boldsymbol{\omega}_x$$, $$\boldsymbol{\omega}_y$$.  The solid angle, then, is approximated by the area of the resulting parallelogram,
+<span class='math'>d\Omega</span> represents the surface area of a unit sphere subtended by a single pixel.  We can obtain an approximation of the arc subtended by a pixel in the x- and y- directions by finding the change in the normalized view vector, <span class='math'>\boldsymbol{\omega}_x</span>, <span class='math'>\boldsymbol{\omega}_y</span>.  The solid angle, then, is approximated by the area of the resulting parallelogram,
 
-$$d\Omega = \left\lVert\boldsymbol{\omega}_x\times\boldsymbol{\omega}_y\right\rVert\text{,}$$
+<div class='math displayMode'>d\Omega = \left\lVert\boldsymbol{\omega}_x\times\boldsymbol{\omega}_y\right\rVert\text{,}</div>
 
 which makes the full equation
 
-$$L_{l,m} = \sum_\Omega L\left(\boldsymbol{\hat{\omega}}\right)Y_{l,m}\left(\boldsymbol{\hat{\omega}}\right)\left\lVert\boldsymbol{\omega}_x\times\boldsymbol{\omega}_y\right\rVert\text{.}$$
+<div class='math displayMode'>L_{l,m} = \sum_\Omega L\left(\boldsymbol{\hat{\omega}}\right)Y_{l,m}\left(\boldsymbol{\hat{\omega}}\right)\left\lVert\boldsymbol{\omega}_x\times\boldsymbol{\omega}_y\right\rVert\text{.}</div>
 
 ## Implementation
 To implement this on the GPU, we perform the integration for each SH basis function separately.
 
-1. Render a texture representing the product $$L\left(\boldsymbol{\hat{\omega}}\right)Y_{l,m}\left(\boldsymbol{\hat{\omega}}\right)\left\lVert\boldsymbol{\omega}_x\times\boldsymbol{\omega}_y\right\rVert$$ from the environmental radiance map.
+1. Render a texture representing the product <span class='math'>L\left(\boldsymbol{\hat{\omega}}\right)Y_{l,m}\left(\boldsymbol{\hat{\omega}}\right)\left\lVert\boldsymbol{\omega}_x\times\boldsymbol{\omega}_y\right\rVert</span> from the environmental radiance map.
 2. Compute the total by parallel reduction (see [GPU Gems 37.2.1](#ref-buck-purcell)), downsampling the texture iteratively and writing the total value of sub-samples in each pass.
 3. When size is sufficiently small, read results to the CPU and compute final total.
 
@@ -73,8 +73,8 @@ The following demo shows the radiance from an environment map (above) and spheri
 </script>
 
 # References and Further Reading
-* <span id='ref-sloan'>*Stupid Spherical Harmonics (SH) Tricks* by P.-P. Sloan</span>
-* <span id='ref-ramamoorthi-hanrahan'>*An Efficient Representation for Irradiance Environment Maps* by R. Ramamoorthi and P. Hanrahan</span>
-* <span id='ref-buck-purcell'>*[GPU Gems, Chapter 37: A Toolkit for Computation on GPUs](https://developer.nvidia.com/gpugems/GPUGems/gpugems_ch37.html)* by I. Buck and T. Purcell</span>
-* <span id='ref-rakos'>*[Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/)* by D. Rakos</span>
+* <a name='ref-sloan'></a>*Stupid Spherical Harmonics (SH) Tricks* by P.-P. Sloan
+* <a name='ref-ramamoorthi-hanrahan'></a>*An Efficient Representation for Irradiance Environment Maps* by R. Ramamoorthi and P. Hanrahan
+* <a name='ref-buck-purcell'></a>*[GPU Gems, Chapter 37: A Toolkit for Computation on GPUs](https://developer.nvidia.com/gpugems/GPUGems/gpugems_ch37.html)* by I. Buck and T. Purcell
+* <a name='ref-rakos'></a>*[Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/)* by D. Rakos
 

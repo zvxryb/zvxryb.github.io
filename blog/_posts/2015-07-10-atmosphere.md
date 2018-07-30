@@ -17,7 +17,7 @@ The appearence of Earth's sky is due to the scattering of light within the atmos
 
 # Implementation
 
-As stated in <a href='#ref-hoffman-preetham'>Rendering Outdoor Light Scattering in Real Time</a>, we can model light scattering by applying two processes at each step.  *Inscattering*, which determines how much light is accumulated by scattering, and *extinction*, which determines how much light is lost due to outscattering and absorption.
+As stated in [Rendering Outdoor Light Scattering in Real Time](#ref-hoffman-preetham), we can model light scattering by applying two processes at each step.  *Inscattering*, which determines how much light is accumulated by scattering, and *extinction*, which determines how much light is lost due to outscattering and absorption.
 
 The constant <span class='math'>\beta</span> represents the total scattering in all directions.  When we accumulate inscatter, we are only interested in light which is specifically scattered towards the observer.  This is given by the "phase function", <span class='math'>\Phi(\theta)</span>, which determines the distribution of scattered light.
 
@@ -98,9 +98,8 @@ The following fragment shader is used to draw a full screen quad to an RGBA (RGB
 
 # Further Reading
 
-* <span id='ref-hoffman-preetham'>*Rendering Outdoor Light Scattering in Real Time* by N. Hoffman and A. J. Preetham</span>
-* <span id='ref-oneil'>*<a href='https://developer.nvidia.com/gpugems/GPUGems2/gpugems2_chapter16.html'>GPU Gems 2, Chapter 16: Accurate Atmospheric Scattering
-</a>* by S. O'Neil<br/></span>
-* <span id='ref-boesch'>*<a href='http://codeflow.org/entries/2011/apr/13/advanced-webgl-part-2-sky-rendering/'>Advanced WebGL - Part 2: Sky Rendering</a>*</span> by F. Boesch
-* <span id='ref-heidrich-seidel'>*View-indepdendent Environment Maps* by W. Heidrich and H.-P. Seidel</span>
+* <a name='ref-hoffman-preetham'></a>*Rendering Outdoor Light Scattering in Real Time* by N. Hoffman and A. J. Preetham
+* <a name='ref-oneil'></a>*[GPU Gems 2, Chapter 16: Accurate Atmospheric Scattering](https://developer.nvidia.com/gpugems/GPUGems2/gpugems2_chapter16.html)* by S. O'Neil<br/>
+* <a name='ref-boesch'></a>*[Advanced WebGL - Part 2: Sky Rendering](http://codeflow.org/entries/2011/apr/13/advanced-webgl-part-2-sky-rendering/)* by F. Boesch
+* <a name='ref-heidrich-seidel'></a>*View-indepdendent Environment Maps* by W. Heidrich and H.-P. Seidel
 
