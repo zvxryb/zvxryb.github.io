@@ -1,0 +1,88 @@
+#monitor-test-container .hidden {
+    display: none !important;
+}
+
+#monitor-test-container {
+    width: 600px;
+    height: 600px;
+    
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+#monitor-test-canvas {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#monitor-test-overlay {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-around;
+
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    pointer-events: none;
+}
+
+#monitor-test-startup-ui {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+
+    max-width: 25em;
+    padding: 0.5em;
+    background-color: #eeeeee;
+    color: #333333;
+    font-family: sans-serif;
+    text-align: justify;
+
+    pointer-events: auto;
+}
+
+#monitor-test-container h1, h2, p, label {
+    margin: 4px;
+}
+
+#monitor-test-startup-ui input[type=checkbox] {
+    display: none;
+}
+
+#monitor-test-startup-ui input[type=checkbox]:not(:checked) + span.toggle::before {
+    content: '\f204';
+}
+
+#monitor-test-startup-ui input[type=checkbox]:checked + span.toggle::before {
+    content: '\f205';
+}
+
+#monitor-test-startup-ui input[type=button] {
+    padding: 8px 16px;
+}
+
+#monitor-test-results-ui {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+
+    color: #eeeeee;
+    font-family: sans-serif;
+    text-align: justify;
+
+    pointer-events: auto;
+}
