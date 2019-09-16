@@ -11,7 +11,8 @@ employment:
           year: 2017
           month: October
         end:
-          current: true
+          year: 2019
+          month: February
       - label: as contractor, TekSystems
         start:
           year: 2016
@@ -19,7 +20,7 @@ employment:
         end:
           year: 2017
           month: October
-    title: Software Engineer
+    title: MTS IV &mdash; Software Engineer
     duties:
       - Application development with C++14, OpenGL Core 4.5, Cuda 8.0
       - Front-end web development with HTML5, ES6, WebGL, WebVR, Angular
